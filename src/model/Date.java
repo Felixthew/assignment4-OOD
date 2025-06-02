@@ -4,6 +4,8 @@ public class Date {
   private int day;
   private int month;
   private int year;
+  private int hour;
+  private int minute;
 
   /**
    * Constructs a {@code Date} object.
@@ -13,7 +15,7 @@ public class Date {
    * @param year  the year of the date
    * @throws IllegalArgumentException if any of the values are invalid
    */
-  public Date(int day, int month, int year) throws IllegalArgumentException {
+  public Date(int day, int month, int year, int hour, int minute) throws IllegalArgumentException {
     // test for valid year
     if (year < 0) {
       throw new IllegalArgumentException("Year cannot be a negative number");
