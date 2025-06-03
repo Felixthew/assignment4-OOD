@@ -1,5 +1,6 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 
@@ -58,13 +59,25 @@ public class EventImp implements Event, Comparable<Event> {
       return this;
     }
 
-    public EventBuilder startDate(LocalDateTime startDate) {
-      this.startDate = startDate;
+    public EventBuilder startDateTime(LocalDateTime startDateTime) {
+      this.startDate = startDateTime;
       return this;
     }
 
-    public EventBuilder endDate(LocalDateTime endDate) {
-      this.endDate = endDate;
+    public EventBuilder startDate(LocalDate startDate) {
+      this.startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+              startDate.getDayOfMonth(), 8, 0);
+      return this;
+    }
+
+    public EventBuilder endDateTime(LocalDateTime endDateTime) {
+      this.endDate = endDateTime;
+      return this;
+    }
+
+    public EventBuilder endDate(LocalDate endDate) {
+      this.startDate = LocalDateTime.of(endDate.getYear(), endDate.getMonth(),
+              endDate.getDayOfMonth(), 17, 0);
       return this;
     }
 
@@ -84,8 +97,10 @@ public class EventImp implements Event, Comparable<Event> {
     }
 
     public EventImp build() {
-      return new EventImp(this.series, this.subject, this.startDate, this.endDate, this.description,
+      EventImp toReturn = new EventImp(this.series, this.subject, this.startDate, this.endDate, this.description,
               this.location, this.status);
+      this.series.add(toReturn);
+      return toReturn;
     }
   }
 
@@ -96,6 +111,10 @@ public class EventImp implements Event, Comparable<Event> {
 
   public LocalDateTime getStartDate() {
     return this.startDate;
+  }
+
+  public EventSeries getEventSeries() {
+    return this.series;
   }
 
   @Override

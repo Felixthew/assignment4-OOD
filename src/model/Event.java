@@ -8,4 +8,5 @@ public interface Event {
 
   LocalDateTime getStartDate();
 
+  EventSeries getEventSeries();
 }
