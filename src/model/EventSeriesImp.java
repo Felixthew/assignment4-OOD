@@ -10,6 +10,10 @@ public class EventSeriesImp implements EventSeries {
     this.eventList = new ArrayList<Event>();
   }
 
+  public EventSeriesImp(List<Event> eventList) {
+    this.eventList = eventList;
+  }
+
   public void add(Event event) {
     this.eventList.add(event);
   }
