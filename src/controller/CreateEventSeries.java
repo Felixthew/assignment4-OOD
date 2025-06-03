@@ -3,7 +3,7 @@ package controller;
 import model.Calendar;
 
 public class CreateEventSeries implements CalendarCommand {
-  public CreateEventSeries() {
+  public CreateEventSeries(String[] specifications) {
   }
 
   @Override

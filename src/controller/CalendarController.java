@@ -1,6 +1,9 @@
 package controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+
+import view.CalendarView;
 
 public interface CalendarController {
   /**
@@ -8,5 +11,7 @@ public interface CalendarController {
    *
    * @param file to be read from. If null then interactive.
    */
-  void go(File file);
+  void goHeadless(File file) throws FileNotFoundException;
+
+  void goInteractive(CalendarView calendarView);
 }
