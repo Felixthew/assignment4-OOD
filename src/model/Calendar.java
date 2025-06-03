@@ -19,5 +19,14 @@ public interface Calendar {
    * @return the event that matches the identifiers.
    * @throws IllegalArgumentException if there is not one singular matching event.
    */
-  Event find(List<String> identifiers) throws IllegalArgumentException;
+  Event findEvent(List<String> identifiers) throws IllegalArgumentException;
+
+  /**
+   * Finds all events that matches the specified criteria.
+   *
+   * @param identifiers subject, start time, and end time are all possible filters.
+   * @return the event that matches the identifiers.
+   * @throws IllegalArgumentException if there is not one singular matching event.
+   */
+  List<Event> findEvents(List<String> identifiers) throws IllegalArgumentException;
 }

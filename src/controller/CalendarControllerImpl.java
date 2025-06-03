@@ -57,7 +57,7 @@ public class CalendarControllerImpl implements CalendarController {
       }
       commandKey += in.next();
     }
-    String[] specifications = in.nextLine().toLowerCase().split(" ");
+    String[] specifications = in.nextLine().toLowerCase();
     CalendarCommand command;
     if ((commandKey).equalsIgnoreCase("create event")) {
       if (Arrays.stream(specifications).anyMatch((s) -> s.equalsIgnoreCase("repeats"))) {
