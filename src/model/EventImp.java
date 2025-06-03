@@ -14,11 +14,6 @@ public class EventImp implements Event, Comparable<Event> {
   private String location;
   private String status;
 
-
-  public EventImp() {
-
-  }
-
   private EventImp(EventSeries series, String subject, LocalDateTime startDate, LocalDateTime endDate,
                    String description, String location, String status) {
     this.series = series;
@@ -88,7 +83,7 @@ public class EventImp implements Event, Comparable<Event> {
       return this;
     }
 
-    public Event build() {
+    public EventImp build() {
       return new EventImp(this.series, this.subject, this.startDate, this.endDate, this.description,
               this.location, this.status);
     }
@@ -105,7 +100,37 @@ public class EventImp implements Event, Comparable<Event> {
 
   @Override
   public Event edit(String property, String newPropertyValue) {
-    return null;
+    switch (property) {
+      case "subject":
+        this.subject = newPropertyValue;
+        break;
+
+      case "start":
+        int year = Integer.parseInt(newPropertyValue.substring(0, 4));
+        int month = Integer.parseInt(newPropertyValue.substring(5, 7));
+        int day = Integer.parseInt(newPropertyValue.substring(8, 10));
+        int hour = Integer.parseInt(newPropertyValue.substring(11, 13));
+        int minute = Integer.parseInt(newPropertyValue.substring(14));
+        this.startDate = LocalDateTime.of(year, month, day, hour, minute);
+
+      case "end":
+        int year2 = Integer.parseInt(newPropertyValue.substring(0, 4));
+        int month2 = Integer.parseInt(newPropertyValue.substring(5, 7));
+        int day2 = Integer.parseInt(newPropertyValue.substring(8, 10));
+        int hour2 = Integer.parseInt(newPropertyValue.substring(11, 13));
+        int minute2 = Integer.parseInt(newPropertyValue.substring(14));
+        this.endDate = LocalDateTime.of(year2, month2, day2, hour2, minute2);
+
+      case "description":
+        this.description = newPropertyValue;
+
+      case "location":
+        this.location = newPropertyValue;
+
+      case "status":
+        this.status = newPropertyValue;
+
+    }
   }
 
 }
