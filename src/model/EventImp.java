@@ -99,7 +99,7 @@ public class EventImp implements Event, Comparable<Event> {
   }
 
   @Override
-  public Event edit(String property, String newPropertyValue) {
+  public void edit(String property, String newPropertyValue) {
     switch (property) {
       case "subject":
         this.subject = newPropertyValue;
