@@ -11,7 +11,7 @@ import model.CalendarApp;
 import view.CalendarView;
 
 public class CalendarControllerImpl implements CalendarController {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws FileNotFoundException {
     Calendar model = new CalendarApp();
     CalendarController controller = new CalendarControllerImpl(model);
     String mode = args[0].toLowerCase();
@@ -67,14 +67,25 @@ public class CalendarControllerImpl implements CalendarController {
       }
       command.execute(calendar);
     }
-    command = switch (commandKey) {
-      case "edit event" -> new EditEvent(specifications);
-      case "edit events" -> new EditEvents(specifications);
-      case "edit series" -> new EditSeries(specifications);
-      case "print events" -> new PrintEvents(specifications);
-      case "show status" -> new ShowStatus(specifications);
-      default -> throw new IllegalArgumentException("Invalid command");
-    };
+    switch (commandKey) {
+      case "edit event":
+        command = new EditEvent(specifications);
+        break;
+      case "edit events":
+        command = new EditEvents(specifications);
+        break;
+      case "edit series":
+        command = new EditSeries(specifications);
+        break;
+      case "print events":
+        command = new PrintEvents(specifications);
+        break;
+      case "show status":
+        command = new ShowStatus(specifications);
+        break;
+      default:
+        throw new IllegalArgumentException("Invalid command");
+    }
     command.execute(calendar);
   }
 }
