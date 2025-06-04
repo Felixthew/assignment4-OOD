@@ -1,6 +1,8 @@
-- Build the view
-- find method for event
-- the rest of the commands (wait till find method is done)
+- Event toString
+- Event equals
+- Event get end date
+- Event get subject
+- the rest of the commands
 - Print events method for calendar
 - show status method in calendar
 - tests

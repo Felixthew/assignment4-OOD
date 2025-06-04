@@ -17,20 +17,20 @@ public class CalendarApp implements Calendar {
 
   @Override
   public Event findEvent(Map<String, String> identifiers) throws IllegalArgumentException {
-    List<Event> filteredEvents = new ArrayList<>();
+    List<Event> filteredEvents = new ArrayList<>(allEvents);
     for (Map.Entry<String, String> indentifierPair : identifiers.entrySet()) {
       String key = indentifierPair.getKey();
       String value = indentifierPair.getValue();
       switch (key) {
         case "subject":
-          filteredEvents = allEvents.stream().filter((e) -> e.getSubject().equals(value));
+          filteredEvents = filteredEvents.stream().filter((e) -> e.getSubject().equals(value));
           break;
         case "from":
-          filteredEvents = allEvents.stream().filter((e) ->
+          filteredEvents = filteredEvents.stream().filter((e) ->
                   e.getStartDate().equals(LocalDateTime.parse(value))).collect(Collectors.toList());
           break;
         case "to":
-          filteredEvents = allEvents.stream().filter((e) ->
+          filteredEvents = filteredEvents.stream().filter((e) ->
                   e.getEndDate().equals(LocalDateTime.parse(value))).collect(Collectors.toList());
           break;
       }
@@ -59,6 +59,16 @@ public class CalendarApp implements Calendar {
       }
     }
     return eventsMatched;
+  }
+
+  @Override
+  public String showStatus(LocalDateTime dateTime) {
+    for (Event event : allEvents) {
+      if (!event.getStartDate().isAfter(dateTime) && !event.getEndDate().isBefore(dateTime)) {
+        return "busy";
+      }
+    }
+    return "free";
   }
 
   @Override

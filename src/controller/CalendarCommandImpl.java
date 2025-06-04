@@ -11,7 +11,7 @@ public abstract class CalendarCommandImpl implements CalendarCommand {
   }
 
   protected static List<String> extractOptionalQuote(List<String> s) {
-    if (s[0].charAt(0) == '\"') {
+    if (s.get(0).charAt(0) == '\"') {
       StringBuilder enclosed = new StringBuilder();
       for (int i = 0; i < s.size(); i++) {
         String string = s.get(i);
@@ -25,5 +25,6 @@ public abstract class CalendarCommandImpl implements CalendarCommand {
         }
       }
     }
+    return s;
   }
 }

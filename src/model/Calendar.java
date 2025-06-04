@@ -40,4 +40,6 @@ public interface Calendar {
    * @return a list of all events in the time frame.
    */
   List<Event> findEvents(LocalDateTime start, LocalDateTime end);
+
+  String showStatus(LocalDateTime dateTime);
 }
