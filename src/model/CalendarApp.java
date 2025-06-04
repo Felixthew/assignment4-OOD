@@ -42,8 +42,23 @@ public class CalendarApp implements Calendar {
   }
 
   @Override
-  public List<Event> findEvents(List<String> identifiers) throws IllegalArgumentException {
-    return List.of();
+  public List<Event> findEvents(LocalDate day) {
+    return findEvents(LocalDateTime.of(
+                    day.getYear(), day.getMonthValue(), day.getDayOfMonth(), 0, 0),
+            LocalDateTime.of(
+                    day.getYear(), day.getMonthValue(), day.getDayOfMonth(), 23, 59
+            ));
+  }
+
+  @Override
+  public List<Event> findEvents(LocalDateTime start, LocalDateTime end) {
+    List<Event> eventsMatched = new ArrayList<>();
+    for (Event event : allEvents) {
+      if (!event.getStartDate().isBefore(start) && !event.getStartDate().isAfter(end)) {
+        eventsMatched.add(event);
+      }
+    }
+    return eventsMatched;
   }
 
   @Override
