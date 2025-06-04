@@ -14,6 +14,8 @@ import model.EventImp;
 import model.EventSeries;
 import model.EventSeriesImp;
 
+import static controller.CalendarControllerImpl.extractAndRemoveSubject;
+
 public class CreateEvent implements CalendarCommand {
   String specifications;
 
@@ -36,7 +38,7 @@ public class CreateEvent implements CalendarCommand {
     EventSeries eventSeries = new EventSeriesImp();
     Map<String, String> eventSpecs = new HashMap<>();
     Map<String, String> seriesSpecs = new HashMap<>();
-    String subject = extractAndRemoveSubject();
+    String subject = extractAndRemoveSubject(this.specifications);
     eventSpecs.put("subject", subject);
 
     String[] eventSpecsList;
@@ -145,18 +147,6 @@ public class CreateEvent implements CalendarCommand {
       String specVal = specList[i + 1];
       specMap.put(specKey, specVal);
     }
-  }
-
-  private String extractAndRemoveSubject() {
-    String subject;
-    if (specifications.charAt(0) == '\"') {
-      subject = specifications.substring(1).split("\" ")[0];
-      specifications = specifications.substring(1).split("\" ")[1];
-    } else {
-      subject = specifications.split(" ")[0];
-      specifications = specifications.replace("\"" + subject + "\" ", "");
-    }
-    return subject;
   }
 
   private static Event buildEvent(Map<String, String> eventSpecs, EventSeries eventSeries) {

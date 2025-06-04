@@ -22,7 +22,7 @@ public interface Calendar {
   Event findEvent(List<String> identifiers) throws IllegalArgumentException;
 
   /**
-   * Finds all events that matches the specified criteria.
+   * Finds all events in a series that matches the specified criteria.
    *
    * @param identifiers subject, start time, and end time are all possible filters.
    * @return the event that matches the identifiers.

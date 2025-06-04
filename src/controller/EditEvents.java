@@ -1,8 +1,10 @@
 package controller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import model.Calendar;
+import model.Event;
 
 public class EditEvents implements CalendarCommand {
   String specifications;
@@ -14,18 +16,22 @@ public class EditEvents implements CalendarCommand {
   @Override
   public void execute(Calendar calendar) {
     // <property> <eventSubject> from <dateStringTtimeString> with <NewPropertyValue>
-    String[] specs = this.specifications.split(" ");
+    String property = this.specifications.split(" ")[0];
 
-    String property = specs[0];
+    String specifications = this.specifications.substring(property.length() + 1);
+    String[] specs = specifications.split(" ");
 
     ArrayList<String> identifiers = new ArrayList<>();
     identifiers.add(specs[1]);
     identifiers.add(specs[3]);
-    identifiers.add(specs[5]);
 
-    String newProperty = specs[7];
+    String newProperty = specs[5];
 
-    calendar.findEvent(identifiers).edit(property, newProperty);
+    List<Event> events = calendar.findEvents(identifiers);
+
+    for (Event event : events) {
+      event.edit(property, newProperty);
+    }
 
   }
 }

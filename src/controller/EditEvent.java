@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 import model.Calendar;
 
+import static controller.CalendarControllerImpl.extractAndRemoveSubject;
+
 public class EditEvent implements CalendarCommand {
   String specifications;
 
@@ -13,10 +15,11 @@ public class EditEvent implements CalendarCommand {
 
   @Override
   public void execute(Calendar calendar) {
-    // edit event <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> with <NewPropertyValue>
-    String[] specs = this.specifications.split(" ");
+    // <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> with <NewPropertyValue>
+    String property = this.specifications.split(" ")[0];
 
-    String property = specs[0];
+    String specifications = this.specifications.substring(property.length() + 1);
+    String[] specs = specifications.split(" ");
 
     ArrayList<String> identifiers = new ArrayList<>();
     identifiers.add(specs[1]);
