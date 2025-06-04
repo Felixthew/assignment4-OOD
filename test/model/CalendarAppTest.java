@@ -7,17 +7,12 @@ import static org.junit.Assert.*;
 public class CalendarAppTest {
 
   @Test
-  public void testEditWholeSeries() {
+  public void findEvent() {
 
   }
 
   @Test
-  public void testEditPartOfSeries() {
-
-  }
-
-  @Test
-  public void testEditPartOfSeriesMultipleTimes() {
+  public void findEvents() {
 
   }
 

@@ -61,78 +61,76 @@ public class CreateEvent implements CalendarCommand {
 
     if (seriesSpecsList != null) {
 
-      if (seriesSpecsList.length < 1) {
-        throw new IllegalArgumentException("No series specifications found");
-      }
-      seriesSpecs.put("repeats", seriesSpecsList[0]);
-      makeSpecifications(seriesSpecs, seriesSpecsList);
+      buildEventSeries(calendar, seriesSpecsList, seriesSpecs, startEvent, eventSeries, eventSpecs);
+    }
+  }
 
-      LocalDateTime startDate = startEvent.getStartDate();
-      Set<DayOfWeek> repeatDays = new HashSet<>();
-      if (seriesSpecs.isEmpty()) {
-        throw new IllegalArgumentException("No series specifications found");
-      }
-      String repeatString = seriesSpecs.get("repeats");
-      for (Character c : repeatString.toCharArray()) {
-        repeatDays.add(dayOfWeekMap.get(c));
-      }
+  private void buildEventSeries(Calendar calendar, String[] seriesSpecsList, Map<String,
+          String> seriesSpecs, Event startEvent, EventSeries eventSeries,
+                                Map<String, String> eventSpecs) {
+    if (seriesSpecsList.length < 1) {
+      throw new IllegalArgumentException("No series specifications found");
+    }
+    seriesSpecs.put("repeats", seriesSpecsList[0]);
+    makeSpecifications(seriesSpecs, seriesSpecsList);
 
-      if (seriesSpecs.containsKey("for")) {
-        int count = 0;
-        int nTimes = Integer.parseInt(seriesSpecs.get("for"));
-        LocalDateTime currentDate = startDate;
-        while (count < nTimes) {
-          currentDate = currentDate.plusDays(1);
-          if (repeatDays.contains(currentDate.getDayOfWeek())) {
-            if (eventSpecs.containsKey("from")) {
-              eventSpecs.put("from", currentDate.toString());
-              // put the end time on the current date
-              String endTime = eventSpecs.get("to").split("T")[1];
-              eventSpecs.put("to", currentDate.toString().split("T")[0] + endTime);
-            } else if (eventSpecs.containsKey("on")) {
-              // put the current date without the time
-              eventSpecs.put("on", currentDate.toString().split("T")[0]);
-            } else {
-              throw new IllegalArgumentException("No date specified");
-            }
-            Event newEvent = buildEvent(eventSpecs, eventSeries);
-            eventSeries.add(newEvent);
-            calendar.add(newEvent);
-            count++;
-          }
+    LocalDateTime startDate = startEvent.getStartDate();
+    Set<DayOfWeek> repeatDays = new HashSet<>();
+    if (seriesSpecs.isEmpty()) {
+      throw new IllegalArgumentException("No series specifications found");
+    }
+    String repeatString = seriesSpecs.get("repeats");
+    for (Character c : repeatString.toCharArray()) {
+      repeatDays.add(dayOfWeekMap.get(c));
+    }
+
+    if (seriesSpecs.containsKey("for")) {
+      int count = 0;
+      int nTimes = Integer.parseInt(seriesSpecs.get("for"));
+      LocalDateTime currentDate = startDate;
+      while (count < nTimes) {
+        currentDate = currentDate.plusDays(1);
+        if (repeatDays.contains(currentDate.getDayOfWeek())) {
+          createSeriesEvent(calendar, eventSeries, eventSpecs, currentDate);
+          count++;
         }
-      } else if (seriesSpecs.containsKey("until")) {
-        // add a day so that it can be an inclusive bound
-        LocalDate endDate = LocalDate.parse(seriesSpecs.get("until")).plusDays(1);
-        LocalDateTime endDateTime = LocalDateTime.of(
-                endDate.getYear(),
-                endDate.getMonthValue(),
-                endDate.getDayOfMonth(),
-                0,
-                0
-        );
-        LocalDateTime currentDate = startDate;
-        while (currentDate.isBefore(endDateTime)) {
-          currentDate.plusDays(1);
-          if (repeatDays.contains(currentDate.getDayOfWeek())) {
-            if (eventSpecs.containsKey("from")) {
-              eventSpecs.put("from", currentDate.toString());
-              // put the end time on the current date
-              String endTime = eventSpecs.get("to").split("T")[1];
-              eventSpecs.put("to", currentDate.toString().split("T")[0] + endTime);
-            } else if (eventSpecs.containsKey("on")) {
-              // put the current date without the time
-              eventSpecs.put("on", currentDate.toString().split("T")[0]);
-            } else {
-              throw new IllegalArgumentException("No date specified");
-            }
-            Event newEvent = buildEvent(eventSpecs, eventSeries);
-            eventSeries.add(newEvent);
-            calendar.add(newEvent);
-          }
+      }
+    } else if (seriesSpecs.containsKey("until")) {
+      // add a day so that it can be an inclusive bound
+      LocalDate endDate = LocalDate.parse(seriesSpecs.get("until")).plusDays(1);
+      LocalDateTime endDateTime = LocalDateTime.of(
+              endDate.getYear(),
+              endDate.getMonthValue(),
+              endDate.getDayOfMonth(),
+              0,
+              0
+      );
+      LocalDateTime currentDate = startDate;
+      while (currentDate.isBefore(endDateTime)) {
+        currentDate = currentDate.plusDays(1);
+        if (repeatDays.contains(currentDate.getDayOfWeek())) {
+          createSeriesEvent(calendar, eventSeries, eventSpecs, currentDate);
         }
       }
     }
+  }
+
+  private void createSeriesEvent(Calendar calendar, EventSeries eventSeries, Map<String,
+          String> eventSpecs, LocalDateTime currentDate) {
+    if (eventSpecs.containsKey("from")) {
+      eventSpecs.put("from", currentDate.toString());
+      // put the end time on the current date
+      String endTime = eventSpecs.get("to").split("T")[1];
+      eventSpecs.put("to", currentDate.toString().split("T")[0] + endTime);
+    } else if (eventSpecs.containsKey("on")) {
+      // put the current date without the time
+      eventSpecs.put("on", currentDate.toString().split("T")[0]);
+    } else {
+      throw new IllegalArgumentException("No date specified");
+    }
+    Event newEvent = buildEvent(eventSpecs, eventSeries);
+    eventSeries.add(newEvent);
+    calendar.add(newEvent);
   }
 
   private void makeSpecifications(Map<String, String> specMap, String[] specList) {

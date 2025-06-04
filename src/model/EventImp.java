@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
 
-public class EventImp implements Event, Comparable<Event> {
+public class EventImp implements Event {
   // the event series this event is associated with, can be a series of 1
   private EventSeries series;
 
