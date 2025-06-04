@@ -56,7 +56,6 @@ public class CreateEvent implements CalendarCommand {
     // build the event
     Event startEvent = buildEvent(eventSpecs, eventSeries);
     // all events will be in series even if that is just a series of one
-    eventSeries.add(startEvent);
     calendar.add(startEvent);
 
     if (seriesSpecsList != null) {
@@ -128,7 +127,6 @@ public class CreateEvent implements CalendarCommand {
       throw new IllegalArgumentException("No date specified");
     }
     Event newEvent = buildEvent(eventSpecs, eventSeries);
-    eventSeries.add(newEvent);
     calendar.add(newEvent);
   }
 

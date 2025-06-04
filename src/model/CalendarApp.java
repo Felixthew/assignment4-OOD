@@ -2,7 +2,10 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class CalendarApp implements Calendar {
   List<Event> allEvents;
@@ -13,12 +16,44 @@ public class CalendarApp implements Calendar {
   }
 
   @Override
-  public Event findEvent(List<String> identifiers) throws IllegalArgumentException {
-    return null;
+  public Event findEvent(Map<String, String> identifiers) throws IllegalArgumentException {
+    List<Event> filteredEvents = new ArrayList<>();
+    for (Map.Entry<String, String> indentifierPair : identifiers.entrySet()) {
+      String key = indentifierPair.getKey();
+      String value = indentifierPair.getValue();
+      switch (key) {
+        case "subject":
+          filteredEvents = allEvents.stream().filter((e) -> e.getSubject().equals(value));
+          break;
+        case "from":
+          filteredEvents = allEvents.stream().filter((e) ->
+                  e.getStartDate().equals(LocalDateTime.parse(value))).collect(Collectors.toList());
+          break;
+        case "to":
+          filteredEvents = allEvents.stream().filter((e) ->
+                  e.getEndDate().equals(LocalDateTime.parse(value))).collect(Collectors.toList());
+          break;
+      }
+    }
+    if (filteredEvents.size() != 1) {
+      throw new IllegalArgumentException("No unique event with those specifications");
+    }
+    return filteredEvents.get(0);
   }
 
   @Override
   public List<Event> findEvents(List<String> identifiers) throws IllegalArgumentException {
     return List.of();
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("Calendar:");
+    for (Event event : allEvents) {
+      sb.append("\n");
+      sb.append(event.toString());
+    }
+    return sb.toString();
   }
 }

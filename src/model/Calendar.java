@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Map;
 
 public interface Calendar {
 
@@ -19,7 +20,7 @@ public interface Calendar {
    * @return the event that matches the identifiers.
    * @throws IllegalArgumentException if there is not one singular matching event.
    */
-  Event findEvent(List<String> identifiers) throws IllegalArgumentException;
+  Event findEvent(Map<String, String> identifiers) throws IllegalArgumentException;
 
   /**
    * Finds all events in a series that matches the specified criteria.
