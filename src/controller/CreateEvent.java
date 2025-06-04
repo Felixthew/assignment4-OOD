@@ -3,8 +3,11 @@ package controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,9 +19,7 @@ import model.EventSeriesImp;
 
 import static controller.CalendarControllerImpl.extractAndRemoveSubject;
 
-public class CreateEvent implements CalendarCommand {
-  String specifications;
-
+public class CreateEvent extends CalendarCommandImpl {
   private static final Map<Character, DayOfWeek> dayOfWeekMap = new HashMap<>(Map.of(
           'm', DayOfWeek.MONDAY,
           't', DayOfWeek.TUESDAY,
@@ -30,7 +31,7 @@ public class CreateEvent implements CalendarCommand {
   ));
 
   public CreateEvent(String specifications) {
-    this.specifications = specifications;
+    super(specifications);
   }
 
   @Override
@@ -41,13 +42,13 @@ public class CreateEvent implements CalendarCommand {
     String subject = extractAndRemoveSubject();
     eventSpecs.put("subject", subject);
 
-    String[] eventSpecsList;
-    String[] seriesSpecsList;
+    List<String> eventSpecsList;
+    List<String> seriesSpecsList;
     if (specifications.contains(" repeats ")) {
-      eventSpecsList = specifications.split(" repeats ")[0].split(" ");
-      seriesSpecsList = ("repeats " + specifications.split(" repeats ")[1]).split(" ");
+      eventSpecsList = Arrays.asList(specifications.split(" repeats ")[0].split(" "));
+      seriesSpecsList = Arrays.asList(("repeats " + specifications.split(" repeats ")[1]).split(" "));
     } else {
-      eventSpecsList = specifications.split(" ");
+      eventSpecsList = Arrays.asList(specifications.split(" "));
       seriesSpecsList = null;
     }
 
@@ -64,10 +65,10 @@ public class CreateEvent implements CalendarCommand {
     }
   }
 
-  private void buildEventSeries(Calendar calendar, String[] seriesSpecsList, Map<String,
+  private void buildEventSeries(Calendar calendar, List<String> seriesSpecsList, Map<String,
                                         String> seriesSpecs, Event startEvent, EventSeries eventSeries,
                                 Map<String, String> eventSpecs) {
-    if (seriesSpecsList.length < 1) {
+    if (seriesSpecsList.isEmpty()) {
       throw new IllegalArgumentException("No series specifications found");
     }
     makeSpecifications(seriesSpecs, seriesSpecsList);
@@ -130,16 +131,16 @@ public class CreateEvent implements CalendarCommand {
     calendar.add(newEvent);
   }
 
-  private void makeSpecifications(Map<String, String> specMap, String[] specList) {
-    for (int i = 0; i < specList.length; i += 2) {
-      String specKey = specList[i];
+  private void makeSpecifications(Map<String, String> specMap, List<String> specList) {
+    for (int i = 0; i < specList.size(); i += 2) {
+      String specKey = specList.get(i);
       if (specKey.equals("times")) {
         return; // always at end of the command
       }
-      if (i + 2 > specList.length) {
+      if (i + 2 > specList.size()) {
         throw new IllegalArgumentException("Incomplete specification");
       }
-      String specVal = specList[i + 1];
+      String specVal = specList.get(i + 1);
       specMap.put(specKey, specVal);
     }
   }
