@@ -5,6 +5,11 @@ import org.junit.Test;
 public class EventImpTest {
 
   @Test
+  public void testInvalidEvents() {
+
+  }
+
+  @Test
   public void compareTo() {
   }
 
