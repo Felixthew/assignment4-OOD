@@ -3,7 +3,10 @@ package controller;
 import model.Calendar;
 
 public class ShowStatus implements CalendarCommand {
-  public ShowStatus(String[] specifications) {
+  private String specifications;
+
+  public ShowStatus(String specifications) {
+    this.specifications = specifications;
   }
 
   @Override

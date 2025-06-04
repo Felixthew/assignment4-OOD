@@ -20,13 +20,13 @@ public class CreateEvent implements CalendarCommand {
   String specifications;
 
   private static final Map<Character, DayOfWeek> dayOfWeekMap = new HashMap<>(Map.of(
-          'M', DayOfWeek.MONDAY,
-          'T', DayOfWeek.TUESDAY,
-          'W', DayOfWeek.WEDNESDAY,
-          'R', DayOfWeek.THURSDAY,
-          'F', DayOfWeek.FRIDAY,
-          'S', DayOfWeek.SATURDAY,
-          'U', DayOfWeek.SUNDAY
+          'm', DayOfWeek.MONDAY,
+          't', DayOfWeek.TUESDAY,
+          'w', DayOfWeek.WEDNESDAY,
+          'r', DayOfWeek.THURSDAY,
+          'f', DayOfWeek.FRIDAY,
+          's', DayOfWeek.SATURDAY,
+          'u', DayOfWeek.SUNDAY
   ));
 
   public CreateEvent(String specifications) {
@@ -38,14 +38,14 @@ public class CreateEvent implements CalendarCommand {
     EventSeries eventSeries = new EventSeriesImp();
     Map<String, String> eventSpecs = new HashMap<>();
     Map<String, String> seriesSpecs = new HashMap<>();
-    String subject = extractAndRemoveSubject(this.specifications);
+    String subject = extractAndRemoveSubject();
     eventSpecs.put("subject", subject);
 
     String[] eventSpecsList;
     String[] seriesSpecsList;
     if (specifications.contains(" repeats ")) {
       eventSpecsList = specifications.split(" repeats ")[0].split(" ");
-      seriesSpecsList = specifications.split(" repeats ")[1].split(" ");
+      seriesSpecsList = ("repeats " + specifications.split(" repeats ")[1]).split(" ");
     } else {
       eventSpecsList = specifications.split(" ");
       seriesSpecsList = null;
@@ -66,12 +66,11 @@ public class CreateEvent implements CalendarCommand {
   }
 
   private void buildEventSeries(Calendar calendar, String[] seriesSpecsList, Map<String,
-          String> seriesSpecs, Event startEvent, EventSeries eventSeries,
+                                        String> seriesSpecs, Event startEvent, EventSeries eventSeries,
                                 Map<String, String> eventSpecs) {
     if (seriesSpecsList.length < 1) {
       throw new IllegalArgumentException("No series specifications found");
     }
-    seriesSpecs.put("repeats", seriesSpecsList[0]);
     makeSpecifications(seriesSpecs, seriesSpecsList);
 
     LocalDateTime startDate = startEvent.getStartDate();
@@ -139,7 +138,7 @@ public class CreateEvent implements CalendarCommand {
       if (specKey.equals("times")) {
         return; // always at end of the command
       }
-      if (i + 2 < specList.length) {
+      if (i + 2 > specList.length) {
         throw new IllegalArgumentException("Incomplete specification");
       }
       String specVal = specList[i + 1];
@@ -159,6 +158,9 @@ public class CreateEvent implements CalendarCommand {
       String key = stringStringEntry.getKey();
       String value = stringStringEntry.getValue();
       switch (key) {
+        case "subject":
+          eventBuilder.subject(value);
+          break;
         case "from":
           eventBuilder.startDateTime(LocalDateTime.parse(value));
           break;
@@ -166,10 +168,34 @@ public class CreateEvent implements CalendarCommand {
           eventBuilder.endDateTime(LocalDateTime.parse(value));
           break;
         case "on":
-          // need to make method
-          // my guess is then the rest of the properties should follow this pattern
+          // default all day needs to set both start and end time
+          eventBuilder.startDate(LocalDate.parse(value));
+          break;
+        case "location":
+          eventBuilder.location(value);
+          break;
+        case "status":
+          eventBuilder.status(value);
+          break;
+        case "description":
+          eventBuilder.description(value);
+          break;
+        default:
+          throw new IllegalArgumentException("Event specification not recognized");
       }
     }
     return eventBuilder.build();
+  }
+
+  public String extractAndRemoveSubject() {
+    String subject;
+    if (specifications.charAt(0) == '\"') {
+      subject = specifications.substring(1).split("\" ")[0];
+      specifications = specifications.substring(1).split("\" ")[1];
+    } else {
+      subject = specifications.split(" ")[0];
+      specifications = specifications.replace(subject + " ", "");
+    }
+    return subject;
   }
 }

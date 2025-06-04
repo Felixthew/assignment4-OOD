@@ -8,26 +8,35 @@ import java.util.Scanner;
 
 import model.Calendar;
 import model.CalendarApp;
+import view.CalendarTextViewImp;
 import view.CalendarView;
 
 public class CalendarControllerImpl implements CalendarController {
   public static void main(String[] args) throws FileNotFoundException {
     Calendar model = new CalendarApp();
     CalendarController controller = new CalendarControllerImpl(model);
-    String mode = args[0].toLowerCase();
+    String mode;
+    if (args.length > 0) {
+      mode = args[0].toLowerCase();
+    } else {
+      mode = "";
+    }
+
 
     if (mode.contains("--mode interactive")) {
-      CalendarView view = null;
+      CalendarView view = new CalendarTextViewImp();
       controller.goInteractive(view);
     } else if (mode.contains("--mode headless")) {
       File file = new File(mode.split("--mode headless")[0]);
       controller.goHeadless(file);
     } else {
       // whatever the default is supposed to be idk.
+      CalendarView view = new CalendarTextViewImp();
+      controller.goInteractive(view);
     }
   }
 
-  Calendar calendar;
+  private final Calendar calendar;
 
   public CalendarControllerImpl(Calendar calendar) {
     this.calendar = calendar;
@@ -46,28 +55,27 @@ public class CalendarControllerImpl implements CalendarController {
   @Override
   public void goInteractive(CalendarView calendarView) {
     Scanner in = new Scanner(System.in);
+    calendarView.promptForInput();
+    // try catch for graceful error handling
+    inputText(in);
+    calendarView.displayCalendar(calendar);
     // call the view and then the scanner
   }
 
   private void inputText(Scanner in) {
-    String commandKey = "";
-    for (int i = 0; i < 2; i++) {
-      if (!in.hasNext()) {
-        throw new IllegalArgumentException("Incomplete command");
-      }
-      commandKey += in.next();
+    String commandKey;
+    commandKey = in.next();
+    if (commandKey.equals("q")) {
+      System.exit(0);
     }
-    String[] specifications = in.nextLine().toLowerCase();
+    commandKey += " " + in.next();
+
+    String specifications = in.nextLine().toLowerCase().strip();
     CalendarCommand command;
-    if ((commandKey).equalsIgnoreCase("create event")) {
-      if (Arrays.stream(specifications).anyMatch((s) -> s.equalsIgnoreCase("repeats"))) {
-        command = new CreateEventSeries(specifications);
-      } else {
-        command = new CreateEvent(specifications);
-      }
-      command.execute(calendar);
-    }
     switch (commandKey) {
+      case "create event":
+        command = new CreateEvent(specifications);
+        break;
       case "edit event":
         command = new EditEvent(specifications);
         break;
@@ -96,7 +104,7 @@ public class CalendarControllerImpl implements CalendarController {
       specifications = specifications.substring(1).split("\" ")[1];
     } else {
       subject = specifications.split(" ")[0];
-      specifications = specifications.replace("\"" + subject + "\" ", "");
+      specifications = specifications.replace(subject, "");
     }
     return subject;
   }
