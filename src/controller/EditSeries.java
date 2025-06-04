@@ -3,8 +3,10 @@ package controller;
 import model.Calendar;
 
 public class EditSeries implements CalendarCommand {
-  public EditSeries(String[] specifications) {
+  String specifications;
 
+  public EditSeries(String specifications) {
+    this.specifications = specifications;
   }
 
   @Override
