@@ -3,15 +3,12 @@ package controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import model.Calendar;
-import model.CalendarApp;
 import model.Event;
 import model.EventImp;
 import model.EventSeries;
@@ -36,6 +33,7 @@ public class CreateEvent implements CalendarCommand {
 
   @Override
   public void execute(Calendar calendar) {
+    EventSeries eventSeries = new EventSeriesImp();
     Map<String, String> eventSpecs = new HashMap<>();
     Map<String, String> seriesSpecs = new HashMap<>();
     String subject = extractAndRemoveSubject();
@@ -54,13 +52,13 @@ public class CreateEvent implements CalendarCommand {
     makeSpecifications(eventSpecs, eventSpecsList);
 
     // build the event
-    Event startEvent = buildEvent(eventSpecs);
+    Event startEvent = buildEvent(eventSpecs, eventSeries);
+    // all events will be in series even if that is just a series of one
+    eventSeries.add(startEvent);
     calendar.add(startEvent);
 
     if (seriesSpecsList != null) {
-      EventSeries eventSeries = new EventSeriesImp();
-      eventSeries.add(startEvent);
-      
+
       if (seriesSpecsList.length < 1) {
         throw new IllegalArgumentException("No series specifications found");
       }
@@ -76,6 +74,7 @@ public class CreateEvent implements CalendarCommand {
       for (Character c : repeatString.toCharArray()) {
         repeatDays.add(dayOfWeekMap.get(c));
       }
+
       if (seriesSpecs.containsKey("for")) {
         int count = 0;
         int nTimes = Integer.parseInt(seriesSpecs.get("for"));
@@ -94,8 +93,9 @@ public class CreateEvent implements CalendarCommand {
             } else {
               throw new IllegalArgumentException("No date specified");
             }
-            Event newEvent = buildEvent(eventSpecs);
+            Event newEvent = buildEvent(eventSpecs, eventSeries);
             eventSeries.add(newEvent);
+            calendar.add(newEvent);
             count++;
           }
         }
@@ -124,8 +124,9 @@ public class CreateEvent implements CalendarCommand {
             } else {
               throw new IllegalArgumentException("No date specified");
             }
-            Event newEvent = buildEvent(eventSpecs);
+            Event newEvent = buildEvent(eventSpecs, eventSeries);
             eventSeries.add(newEvent);
+            calendar.add(newEvent);
           }
         }
       }
@@ -158,8 +159,10 @@ public class CreateEvent implements CalendarCommand {
     return subject;
   }
 
-  private static Event buildEvent(Map<String, String> eventSpecs) {
+  private static Event buildEvent(Map<String, String> eventSpecs, EventSeries eventSeries) {
     EventImp.EventBuilder eventBuilder = EventImp.getBuilder();
+    eventBuilder.series(eventSeries);
+
     if (eventSpecs.isEmpty()) {
       throw new IllegalArgumentException("Expected specifications");
     }
