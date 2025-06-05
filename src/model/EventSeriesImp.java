@@ -40,5 +40,8 @@ public class EventSeriesImp implements EventSeries {
     }
   }
 
-
+  @Override
+  public boolean isFullSeries() {
+    return this.eventList.size() > 1;
+  }
 }

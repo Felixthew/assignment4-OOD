@@ -141,7 +141,24 @@ public class EventImp implements Event {
         int day = Integer.parseInt(newPropertyValue.substring(8, 10));
         int hour = Integer.parseInt(newPropertyValue.substring(11, 13));
         int minute = Integer.parseInt(newPropertyValue.substring(14));
-        this.startDate = LocalDateTime.of(year, month, day, hour, minute);
+        LocalDateTime newStartDate = LocalDateTime.of(year, month, day, hour, minute);
+
+        // should not be able to make a series event span multiple days
+        if (this.getEventSeries().isFullSeries()) {
+          if (newStartDate.getYear() != this.startDate.getYear() ||
+                  newStartDate.getDayOfYear() != this.startDate.getDayOfYear()) {
+            throw new IllegalArgumentException("Event must take place all on the same day!");
+          }
+        }
+
+        // if start date is after end date, swap the two
+        if (newStartDate.isAfter(this.endDate)) {
+          this.startDate = this.endDate;
+          this.endDate = newStartDate;
+        } else {
+          this.startDate = newStartDate;
+        }
+
         break;
 
       case "end":
@@ -150,7 +167,24 @@ public class EventImp implements Event {
         int day2 = Integer.parseInt(newPropertyValue.substring(8, 10));
         int hour2 = Integer.parseInt(newPropertyValue.substring(11, 13));
         int minute2 = Integer.parseInt(newPropertyValue.substring(14));
-        this.endDate = LocalDateTime.of(year2, month2, day2, hour2, minute2);
+        LocalDateTime newEndDate = LocalDateTime.of(year2, month2, day2, hour2, minute2);
+
+        // should not be able to make a series event span multiple days
+        if (this.getEventSeries().isFullSeries()) {
+          if (newEndDate.getYear() != this.endDate.getYear() ||
+                  newEndDate.getDayOfYear() != this.endDate.getDayOfYear()) {
+            throw new IllegalArgumentException("Event must take place all on the same day!");
+          }
+        }
+
+        // if end date is before start date, swap the two
+        if (newEndDate.isBefore(this.startDate)) {
+          this.endDate = this.startDate;
+          this.startDate = newEndDate;
+        } else {
+          this.endDate = newEndDate;
+        }
+
         break;
 
       case "description":

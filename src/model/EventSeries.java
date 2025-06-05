@@ -10,4 +10,6 @@ public interface EventSeries {
   void editAll(String property, String newPropertyValue);
 
   void editFrom(String property, String newPropertyValue, LocalDateTime start);
+
+  boolean isFullSeries();
 }
