@@ -79,6 +79,7 @@ public class CreateEvent extends CalendarCommandImpl {
     if (seriesSpecs.isEmpty()) {
       throw new IllegalArgumentException("No series specifications found");
     }
+    repeatDays.add(startDate.getDayOfWeek());
     String repeatString = seriesSpecs.get("repeats");
     for (Character c : repeatString.toCharArray()) {
       repeatDays.add(dayOfWeekMap.get(c));
