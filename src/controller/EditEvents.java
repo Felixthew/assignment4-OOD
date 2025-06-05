@@ -31,7 +31,7 @@ public class EditEvents implements CalendarCommand {
 
     Event event = calendar.findEvent(identifiers);
 
-    event.getEventSeries().editFrom(property, newProperty, LocalDateTime.parse(specs[3]));
+    event.getEventSeries().editFrom(property, newProperty, LocalDateTime.parse(specs[2]));
 
   }
 }
