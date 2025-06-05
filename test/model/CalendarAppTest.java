@@ -3,6 +3,7 @@ package model;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,12 +77,30 @@ public class CalendarAppTest {
   @Test
   public void testPrintEvents() {
     Calendar calendar = buildBasicTestCalendar();
+    calendar.add(EventImp.getBuilder()
+            .subject("ood")
+            .allDay(LocalDate.of(2025, 1, 3))
+            .build());
+    List<Event> expected = new ArrayList<>(List.of(
+            EventImp.getBuilder()
+                    .subject("test")
+                    .allDay(LocalDate.of(2025, 1, 1))
+                    .build()
+            , EventImp.getBuilder()
+                    .subject("test other")
+                    .allDay(LocalDate.of(2025, 1, 1))
+                    .build()
+    ));
+    // should work, the problem lies with junit.
+    assertEquals(expected, calendar.findEvents(LocalDate.of(2025, 1, 1)));
     // assert the string
   }
 
   @Test
   public void testShowStatus() {
-
+    Calendar calendar = buildBasicTestCalendar();
+    assertEquals("busy", calendar.showStatus(LocalDateTime.of(2025, 1, 1, 10, 0)));
+    assertEquals("free", calendar.showStatus(LocalDateTime.of(2025, 1, 1, 5, 0)));
   }
 
 }
