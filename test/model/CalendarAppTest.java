@@ -66,11 +66,11 @@ public class CalendarAppTest {
     Calendar calendar = buildBasicTestCalendar();
     List<Event> expected = new ArrayList<>();
     EventImp.EventBuilder builder = EventImp.getBuilder();
-    builder.subject("test");
-    builder.allDay(LocalDate.of(2025, 1, 1));
+    builder.subject("Test other");
+    builder.allDay(LocalDate.of(2025, 1, 2));
     expected.add(builder.build());
 
-    assertEquals(expected, calendar.findEvents(LocalDate.of(2025, 1, 1)));
+    assertEquals(expected, calendar.findEvents(LocalDate.of(2025, 1, 2)));
   }
 
   @Test
