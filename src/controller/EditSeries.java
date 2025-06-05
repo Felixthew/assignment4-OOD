@@ -1,10 +1,10 @@
 package controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import model.Calendar;
 import model.Event;
+import view.CalendarView;
 
 public class EditSeries implements CalendarCommand {
   String specifications;
@@ -14,23 +14,22 @@ public class EditSeries implements CalendarCommand {
   }
 
   @Override
-  public void execute(Calendar calendar) {
+  public void execute(Calendar calendar, CalendarView view) {
     // <property> <eventSubject> from <dateStringTtimeString> with <NewPropertyValue>
+    HashMap<String, String> identifiers = new HashMap<>();
+
     String property = this.specifications.split(" ")[0];
 
     String specifications = this.specifications.substring(property.length() + 1);
     String[] specs = specifications.split(" ");
 
-    ArrayList<String> identifiers = new ArrayList<>();
-    identifiers.add(specs[1]);
-    identifiers.add(specs[3]);
+    identifiers.put("subject", specs[1]);
+    identifiers.put("from", specs[3]);
 
     String newProperty = specs[5];
 
-    List<Event> events = calendar.findEvents(identifiers);
+    Event event = calendar.findEvent(identifiers);
 
-    for (Event event : events) {
-      event.edit(property, newProperty);
-    }
+    event.getEventSeries().editAll(property, newProperty);
   }
 }

@@ -3,43 +3,19 @@ package controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import model.Calendar;
-import model.CalendarApp;
-import view.CalendarTextViewImp;
 import view.CalendarView;
 
 public class CalendarControllerImpl implements CalendarController {
-  public static void main(String[] args) throws FileNotFoundException {
-    Calendar model = new CalendarApp();
-    CalendarController controller = new CalendarControllerImpl(model);
-    String mode;
-    if (args.length > 0) {
-      mode = args[0].toLowerCase();
-    } else {
-      mode = "";
-    }
-
-
-    if (mode.contains("--mode interactive")) {
-      CalendarView view = new CalendarTextViewImp();
-      controller.goInteractive(view);
-    } else if (mode.contains("--mode headless")) {
-      File file = new File(mode.split("--mode headless")[0]);
-      controller.goHeadless(file);
-    } else {
-      // whatever the default is supposed to be idk.
-      CalendarView view = new CalendarTextViewImp();
-      controller.goInteractive(view);
-    }
-  }
 
   private final Calendar calendar;
+  private final CalendarView view;
 
-  public CalendarControllerImpl(Calendar calendar) {
+  public CalendarControllerImpl(Calendar calendar, CalendarView view) {
     this.calendar = calendar;
+    this.view = view;
   }
 
   @Override
@@ -50,15 +26,16 @@ public class CalendarControllerImpl implements CalendarController {
       inputText(in);
       in.nextLine();
     }
+    // missing exit command
   }
 
   @Override
-  public void goInteractive(CalendarView calendarView) {
+  public void goInteractive() {
     Scanner in = new Scanner(System.in);
-    calendarView.promptForInput();
+    view.promptForInput();
     // try catch for graceful error handling
     inputText(in);
-    calendarView.displayCalendar(calendar);
+    view.displayCalendar(calendar);
     // call the view and then the scanner
   }
 
@@ -94,7 +71,7 @@ public class CalendarControllerImpl implements CalendarController {
       default:
         throw new IllegalArgumentException("Invalid command");
     }
-    command.execute(calendar);
+    command.execute(calendar, view);
   }
 
   public static String extractAndRemoveSubject(String specifications) {

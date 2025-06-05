@@ -3,6 +3,8 @@ package model;
 import org.junit.Test;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -13,19 +15,19 @@ public class CalendarAppTest {
     Calendar calendar = new CalendarApp();
     EventImp.EventBuilder builder = EventImp.getBuilder();
     builder.subject("test");
-    builder.startDate(LocalDate.of(2025, 1, 1));
+    builder.allDay(LocalDate.of(2025, 1, 1));
     calendar.add(builder.build());
 
     EventImp.EventBuilder builder2 = EventImp.getBuilder();
     builder2.subject("test");
-    builder.startDate(LocalDate.of(2025, 1, 1));
+    builder.allDay(LocalDate.of(2025, 1, 1));
     assertThrows(IllegalArgumentException.class, () -> calendar.add(builder.build()));
   }
 
   @Test
   public void testAddEvent() {
     Calendar calendar = buildBasicTestCalerndar();
-
+    System.out.println(calendar);
     // assert the print statement of calendar is correct
   }
 
@@ -33,11 +35,11 @@ public class CalendarAppTest {
     Calendar calendar = new CalendarApp();
     EventImp.EventBuilder builder = EventImp.getBuilder();
     builder.subject("test");
-    builder.startDate(LocalDate.of(2025, 1, 1));
+    builder.allDay(LocalDate.of(2025, 1, 1));
     calendar.add(builder.build());
     builder.subject("Test other");
     calendar.add(builder.build());
-    builder.startDate(LocalDate.of(2025, 1, 2));
+    builder.allDay(LocalDate.of(2025, 1, 2));
     calendar.add(builder.build());
     return calendar;
   }
@@ -46,9 +48,15 @@ public class CalendarAppTest {
   public void findEvent() {
     Calendar calendar = buildBasicTestCalerndar();
     EventImp expected = EventImp.getBuilder()
-            .startDate(LocalDate.of(2025, 1, 2))
+            .allDay(LocalDate.of(2025, 1, 2))
             .subject("Test other")
             .build();
+
+    Map<String, String> specs = new HashMap<>(Map.of(
+            "subject", "Test other",
+            "from", "2025-01-02T08:00"
+    ));
+    System.out.println(calendar.findEvent(specs));
     // assert the find result
   }
 

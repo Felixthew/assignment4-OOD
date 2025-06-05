@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -10,9 +11,18 @@ import java.util.stream.Collectors;
 public class CalendarApp implements Calendar {
   List<Event> allEvents;
 
+  public CalendarApp() {
+    this.allEvents = new ArrayList<>();
+  }
+
   @Override
   public Calendar add(Event event) {
-    return null;
+    if (allEvents.stream().anyMatch((e) -> e.equals(event))) {
+      throw new IllegalArgumentException("Cannot have duplicates");
+    }
+    this.allEvents.add(event);
+    Collections.sort(allEvents);
+    return this;
   }
 
   @Override
@@ -23,7 +33,9 @@ public class CalendarApp implements Calendar {
       String value = indentifierPair.getValue();
       switch (key) {
         case "subject":
-          filteredEvents = filteredEvents.stream().filter((e) -> e.getSubject().equals(value));
+          filteredEvents = filteredEvents.stream().filter((e) ->
+                  e.getSubject().equals(value)).collect(Collectors.toList());
+          ;
           break;
         case "from":
           filteredEvents = filteredEvents.stream().filter((e) ->

@@ -20,4 +20,16 @@ public class CalendarTextViewImp implements CalendarView {
   public void displayCalendar(Calendar calendar) {
     System.out.println(calendar);
   }
+
+  @Override
+  public void displayEvent(Event event) {
+    System.out.println("• " + event.toString());
+  }
+
+  @Override
+  public void displayMessage(String message) {
+    System.out.println(message);
+  }
+
+
 }

@@ -8,5 +8,13 @@ public interface Event extends Comparable<Event> {
 
   LocalDateTime getStartDate();
 
+  LocalDateTime getEndDate();
+
+  String getSubject();
+
+  void setSeries(EventSeries series);
+
   EventSeries getEventSeries();
+
+  String toString();
 }

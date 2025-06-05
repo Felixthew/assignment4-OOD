@@ -3,7 +3,6 @@ package controller;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -16,8 +15,7 @@ import model.Event;
 import model.EventImp;
 import model.EventSeries;
 import model.EventSeriesImp;
-
-import static controller.CalendarControllerImpl.extractAndRemoveSubject;
+import view.CalendarView;
 
 public class CreateEvent extends CalendarCommandImpl {
   private static final Map<Character, DayOfWeek> dayOfWeekMap = new HashMap<>(Map.of(
@@ -35,7 +33,7 @@ public class CreateEvent extends CalendarCommandImpl {
   }
 
   @Override
-  public void execute(Calendar calendar) {
+  public void execute(Calendar calendar, CalendarView view) {
     EventSeries eventSeries = new EventSeriesImp();
     Map<String, String> eventSpecs = new HashMap<>();
     Map<String, String> seriesSpecs = new HashMap<>();
@@ -66,8 +64,11 @@ public class CreateEvent extends CalendarCommandImpl {
   }
 
   private void buildEventSeries(Calendar calendar, List<String> seriesSpecsList, Map<String,
-                                        String> seriesSpecs, Event startEvent, EventSeries eventSeries,
+          String> seriesSpecs, Event startEvent, EventSeries eventSeries,
                                 Map<String, String> eventSpecs) {
+    if (startEvent.getStartDate().getDayOfMonth() != startEvent.getEndDate().getDayOfMonth()) {
+      throw new IllegalArgumentException("Series events cannot span multiple days");
+    }
     if (seriesSpecsList.isEmpty()) {
       throw new IllegalArgumentException("No series specifications found");
     }
@@ -167,8 +168,7 @@ public class CreateEvent extends CalendarCommandImpl {
           eventBuilder.endDateTime(LocalDateTime.parse(value));
           break;
         case "on":
-          // default all day needs to set both start and end time
-          eventBuilder.startDate(LocalDate.parse(value));
+          eventBuilder.allDay(LocalDate.parse(value));
           break;
         case "location":
           eventBuilder.location(value);

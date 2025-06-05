@@ -25,10 +25,17 @@ public class EventSeriesImp implements EventSeries {
   @Override
   public void editFrom(String property, String newPropertyValue, LocalDateTime start) {
     // I believe if start or end time is edited it's supposed to split the series
+    EventSeries newSeries = new EventSeriesImp();
+
     Collections.sort(eventList);
     for (Event event : eventList) {
       if (!start.isAfter(event.getStartDate())) {
         event.edit(property, newPropertyValue);
+        if (property.equals("start")) {
+          newSeries.add(event);
+          eventList.remove(event);
+          event.setSeries(newSeries);
+        }
       }
     }
   }

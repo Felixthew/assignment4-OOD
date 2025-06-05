@@ -1,10 +1,9 @@
 package controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 import model.Calendar;
-
-import static controller.CalendarControllerImpl.extractAndRemoveSubject;
+import view.CalendarView;
 
 public class EditEvent implements CalendarCommand {
   String specifications;
@@ -14,17 +13,18 @@ public class EditEvent implements CalendarCommand {
   }
 
   @Override
-  public void execute(Calendar calendar) {
+  public void execute(Calendar calendar, CalendarView view) {
     // <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> with <NewPropertyValue>
+    HashMap<String, String> identifiers = new HashMap<>();
+
     String property = this.specifications.split(" ")[0];
 
     String specifications = this.specifications.substring(property.length() + 1);
     String[] specs = specifications.split(" ");
 
-    ArrayList<String> identifiers = new ArrayList<>();
-    identifiers.add(specs[1]);
-    identifiers.add(specs[3]);
-    identifiers.add(specs[5]);
+    identifiers.put("subject", specs[1]);
+    identifiers.put("from", specs[3]);
+    identifiers.put("to", specs[5]);
 
     String newProperty = specs[7];
 

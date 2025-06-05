@@ -3,6 +3,7 @@ package model;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.chrono.ChronoLocalDateTime;
+import java.util.Objects;
 
 public class EventImp implements Event {
   // the event series this event is associated with, can be a series of 1
@@ -64,20 +65,16 @@ public class EventImp implements Event {
       return this;
     }
 
-    public EventBuilder startDate(LocalDate startDate) {
+    public EventBuilder allDay(LocalDate startDate) {
       this.startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
               startDate.getDayOfMonth(), 8, 0);
+      this.endDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
+              startDate.getDayOfMonth(), 17, 0);
       return this;
     }
 
     public EventBuilder endDateTime(LocalDateTime endDateTime) {
       this.endDate = endDateTime;
-      return this;
-    }
-
-    public EventBuilder endDate(LocalDate endDate) {
-      this.startDate = LocalDateTime.of(endDate.getYear(), endDate.getMonth(),
-              endDate.getDayOfMonth(), 17, 0);
       return this;
     }
 
@@ -113,6 +110,20 @@ public class EventImp implements Event {
     return this.startDate;
   }
 
+  public LocalDateTime getEndDate() {
+    return this.endDate;
+  }
+
+  @Override
+  public String getSubject() {
+    return subject;
+  }
+
+  @Override
+  public void setSeries(EventSeries series) {
+    this.series = series;
+  }
+
   public EventSeries getEventSeries() {
     return this.series;
   }
@@ -131,6 +142,7 @@ public class EventImp implements Event {
         int hour = Integer.parseInt(newPropertyValue.substring(11, 13));
         int minute = Integer.parseInt(newPropertyValue.substring(14));
         this.startDate = LocalDateTime.of(year, month, day, hour, minute);
+        break;
 
       case "end":
         int year2 = Integer.parseInt(newPropertyValue.substring(0, 4));
@@ -139,17 +151,49 @@ public class EventImp implements Event {
         int hour2 = Integer.parseInt(newPropertyValue.substring(11, 13));
         int minute2 = Integer.parseInt(newPropertyValue.substring(14));
         this.endDate = LocalDateTime.of(year2, month2, day2, hour2, minute2);
+        break;
 
       case "description":
         this.description = newPropertyValue;
+        break;
 
       case "location":
         this.location = newPropertyValue;
+        break;
 
       case "status":
         this.status = newPropertyValue;
+        break;
 
+      // do nothing if property is invalid?
+      default:
+        break;
     }
   }
 
+  public String toString() {
+    String result = this.subject + ": starts " + this.startDate.toString() + ", ends " +
+            this.endDate.toString();
+
+    // if there is a specified location
+    if (!this.location.equals("")) {
+      result = result + ", location: " + this.location;
+    }
+
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (obj instanceof EventImp other) {
+      return other.getSubject().equals(this.subject) && other.getStartDate().equals(this.startDate)
+              && other.getEndDate().equals(this.endDate);
+    }
+
+    return false;
+  }
+
+  public int hashCode() {
+    return Objects.hash(this.subject, this.startDate, this.endDate);
+  }
 }

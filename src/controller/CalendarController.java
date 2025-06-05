@@ -13,5 +13,5 @@ public interface CalendarController {
    */
   void goHeadless(File file) throws FileNotFoundException;
 
-  void goInteractive(CalendarView calendarView);
+  void goInteractive();
 }

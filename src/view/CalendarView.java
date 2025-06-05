@@ -11,4 +11,8 @@ public interface CalendarView {
 
   void displayCalendar(Calendar calendar);
 
+  void displayEvent(Event event);
+
+  void displayMessage(String message);
+
 }
