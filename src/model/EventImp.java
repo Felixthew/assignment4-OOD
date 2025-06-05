@@ -185,7 +185,9 @@ public class EventImp implements Event {
 
   @Override
   public boolean equals(Object obj) {
-    if (obj instanceof EventImp other) {
+    if (obj instanceof EventImp) {
+      EventImp other = (EventImp) obj;
+
       return other.getSubject().equals(this.subject) && other.getStartDate().equals(this.startDate)
               && other.getEndDate().equals(this.endDate);
     }
