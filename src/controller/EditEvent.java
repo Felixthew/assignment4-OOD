@@ -22,11 +22,11 @@ public class EditEvent implements CalendarCommand {
     String specifications = this.specifications.substring(property.length() + 1);
     String[] specs = specifications.split(" ");
 
-    identifiers.put("subject", specs[1]);
-    identifiers.put("from", specs[3]);
-    identifiers.put("to", specs[5]);
+    identifiers.put("subject", specs[0]);
+    identifiers.put("from", specs[2]);
+    identifiers.put("to", specs[4]);
 
-    String newProperty = specs[7];
+    String newProperty = specs[6];
 
     calendar.findEvent(identifiers).edit(property, newProperty);
   }

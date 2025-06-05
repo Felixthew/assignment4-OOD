@@ -28,15 +28,19 @@ public class EventSeriesImp implements EventSeries {
     EventSeries newSeries = new EventSeriesImp();
 
     Collections.sort(eventList);
+    List<Event> removals = new ArrayList<>(); // to avoid CME
     for (Event event : eventList) {
       if (!start.isAfter(event.getStartDate())) {
         event.edit(property, newPropertyValue);
         if (property.equals("start")) {
           newSeries.add(event);
-          eventList.remove(event);
+          removals.add(event);
           event.setSeries(newSeries);
         }
       }
+    }
+    for (Event event : removals) {
+      eventList.remove(event);
     }
   }
 

@@ -24,14 +24,14 @@ public class EditEvents implements CalendarCommand {
     String specifications = this.specifications.substring(property.length() + 1);
     String[] specs = specifications.split(" ");
 
-    identifiers.put("subject", specs[1]);
-    identifiers.put("from", specs[3]);
+    identifiers.put("subject", specs[0]);
+    identifiers.put("from", specs[2]);
 
-    String newProperty = specs[5];
+    String newProperty = specs[4];
 
     Event event = calendar.findEvent(identifiers);
 
-    event.getEventSeries().editFrom(property, newProperty, LocalDateTime.parse(specs[3]));
+    event.getEventSeries().editFrom(property, newProperty, LocalDateTime.parse(specs[2]));
 
   }
 }
