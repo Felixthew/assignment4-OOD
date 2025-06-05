@@ -32,11 +32,12 @@ public class CalendarControllerImpl implements CalendarController {
   @Override
   public void goInteractive() {
     Scanner in = new Scanner(System.in);
-    view.promptForInput();
-    // try catch for graceful error handling
-    inputText(in);
-    view.displayCalendar(calendar);
-    // call the view and then the scanner
+    while (true) {
+      view.promptForInput();
+      // try catch for graceful error handling
+      inputText(in);
+      view.displayCalendar(calendar);
+    }
   }
 
   private void inputText(Scanner in) {

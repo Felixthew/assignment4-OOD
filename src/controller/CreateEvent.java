@@ -64,7 +64,7 @@ public class CreateEvent extends CalendarCommandImpl {
   }
 
   private void buildEventSeries(Calendar calendar, List<String> seriesSpecsList, Map<String,
-          String> seriesSpecs, Event startEvent, EventSeries eventSeries,
+                                        String> seriesSpecs, Event startEvent, EventSeries eventSeries,
                                 Map<String, String> eventSpecs) {
     if (startEvent.getStartDate().getDayOfMonth() != startEvent.getEndDate().getDayOfMonth()) {
       throw new IllegalArgumentException("Series events cannot span multiple days");
@@ -120,11 +120,11 @@ public class CreateEvent extends CalendarCommandImpl {
     if (eventSpecs.containsKey("from")) {
       eventSpecs.put("from", currentDate.toString());
       // put the end time on the current date
-      String endTime = eventSpecs.get("to").split("T")[1];
-      eventSpecs.put("to", currentDate.toString().split("T")[0] + endTime);
+      String endTime = eventSpecs.get("to").split("[tT]")[1];
+      eventSpecs.put("to", currentDate.toString().split("[tT]")[0] + "T" + endTime);
     } else if (eventSpecs.containsKey("on")) {
       // put the current date without the time
-      eventSpecs.put("on", currentDate.toString().split("T")[0]);
+      eventSpecs.put("on", currentDate.toString().split("[tT]")[0]);
     } else {
       throw new IllegalArgumentException("No date specified");
     }
