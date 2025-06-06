@@ -25,6 +25,7 @@ public class CalendarControllerImpl implements CalendarController {
     while (in.hasNext()) {
       inputText(in);
     }
+    view.displayError("No exit command found!");
     // missing exit command
   }
 
@@ -32,16 +33,21 @@ public class CalendarControllerImpl implements CalendarController {
   public void goInteractive() {
     Scanner in = new Scanner(System.in);
     while (true) {
-      view.promptForInput();
-      // try catch for graceful error handling
-      inputText(in);
+      try {
+        view.promptForInput();
+        // try catch for graceful error handling
+        inputText(in);
+      } catch (Exception e) {
+        view.displayError(e.getMessage());
+      }
     }
   }
 
   private void inputText(Scanner in) {
     String commandKey;
     commandKey = in.next();
-    if (commandKey.equals("q")) {
+    if (commandKey.equalsIgnoreCase("q")
+            || commandKey.equalsIgnoreCase("quit")) {
       System.exit(0);
     }
     commandKey += " " + in.next();

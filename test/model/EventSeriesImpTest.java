@@ -122,5 +122,9 @@ public class EventSeriesImpTest {
 
     series.editFrom("start", "2025-06-07T10:00", LocalDateTime.of(2025, 6, 7, 1, 0));
     assertNotEquals(event1.getEventSeries(), event2.getEventSeries());
+    assertEquals(LocalDateTime.of(2025, 6, 6, 8, 0), event1.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 7, 10, 0), event2.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 7, 17, 0), event2.getEndDate());
+    assertEquals(LocalDateTime.of(2025, 6, 8, 10, 0), event3.getStartDate());
   }
 }

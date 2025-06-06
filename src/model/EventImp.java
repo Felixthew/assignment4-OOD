@@ -172,6 +172,9 @@ public class EventImp implements Event {
       default:
         break;
     }
+    if (this.startDate.isAfter(this.endDate)) {
+      throw new IllegalArgumentException("Start cannot be after end date");
+    }
   }
 
   public String toString() {
