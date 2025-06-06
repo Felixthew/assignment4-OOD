@@ -31,12 +31,17 @@ public class EventSeriesImp implements EventSeries {
     List<Event> removals = new ArrayList<>(); // to avoid CME
     for (Event event : eventList) {
       if (!start.isAfter(event.getStartDate())) {
-        event.edit(property, newPropertyValue);
         if (property.equals("start")) {
           newSeries.add(event);
           removals.add(event);
           event.setSeries(newSeries);
+          newPropertyValue = event.getStartDate().toString().split("T")[0] + "T"
+                  + newPropertyValue.split("[tT]")[1];
+        } else if (property.equals("end")) {
+          newPropertyValue = event.getEndDate().toString().split("T")[0] + "T"
+                  + newPropertyValue.split("[tT]")[1];
         }
+        event.edit(property, newPropertyValue);
       }
     }
     for (Event event : removals) {

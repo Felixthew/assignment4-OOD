@@ -36,6 +36,13 @@ public class EventImpTest {
 
   @Test
   public void getStartDate() {
+    Event event = EventImp.getBuilder()
+            .allDay(LocalDate.of(2025, 6, 6))
+            .build();
+    assertEquals(LocalDateTime.of(2025, 6, 6, 8, 0),
+            event.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 6, 17, 0),
+            event.getEndDate());
   }
 
   @Test
