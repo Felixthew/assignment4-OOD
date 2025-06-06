@@ -16,7 +16,8 @@ public class EventImp implements Event {
   private String location;
   private String status;
 
-  private EventImp(EventSeries series, String subject, LocalDateTime startDate, LocalDateTime endDate,
+  private EventImp(EventSeries series, String subject, LocalDateTime startDate,
+                   LocalDateTime endDate,
                    String description, String location, String status) {
     if (startDate.isAfter(endDate)) {
       throw new IllegalArgumentException("Start date cannot be after end date");
@@ -30,10 +31,18 @@ public class EventImp implements Event {
     this.status = status;
   }
 
+  /**
+   * Method to utilize builder to build event.
+   *
+   * @return builder to build event.
+   */
   public static EventBuilder getBuilder() {
     return new EventBuilder();
   }
 
+  /**
+   * EventBuilder class to help set fields of Event.
+   */
   public static class EventBuilder {
     private EventSeries series;
     private String subject;
@@ -53,21 +62,46 @@ public class EventImp implements Event {
       this.status = "";
     }
 
+    /**
+     * Sets the event series of this event is associated with to the given series.
+     *
+     * @param series event series this event belongs to
+     * @return the accumulated builder
+     */
     public EventBuilder series(EventSeries series) {
       this.series = series;
       return this;
     }
 
+    /**
+     * Sets the event subject of this event to the given string.
+     *
+     * @param subject subject of this event
+     * @return the accumulated builder
+     */
     public EventBuilder subject(String subject) {
       this.subject = subject;
       return this;
     }
 
+    /**
+     * Sets the start time and date of this event to the given LocalDateTime.
+     *
+     * @param startDateTime start time of this event
+     * @return the accumulated builder
+     */
     public EventBuilder startDateTime(LocalDateTime startDateTime) {
       this.startDate = startDateTime;
       return this;
     }
 
+    /**
+     * Sets the start and end time & date of this event to the default times (8:00 AM
+     * start, 5:00 PM end) on the given day.
+     *
+     * @param startDate day of this event
+     * @return the accumulated builder
+     */
     public EventBuilder allDay(LocalDate startDate) {
       this.startDate = LocalDateTime.of(startDate.getYear(), startDate.getMonth(),
               startDate.getDayOfMonth(), 8, 0);
@@ -76,26 +110,55 @@ public class EventImp implements Event {
       return this;
     }
 
+    /**
+     * Sets the end time and date of this event to the given LocalDateTime.
+     *
+     * @param endDateTime end time of this event
+     * @return the accumulated builder
+     */
     public EventBuilder endDateTime(LocalDateTime endDateTime) {
       this.endDate = endDateTime;
       return this;
     }
 
+    /**
+     * Sets the description of this event to the given string.
+     *
+     * @param description description of this event
+     * @return the accumulated builder
+     */
     public EventBuilder description(String description) {
       this.description = description;
       return this;
     }
 
+    /**
+     * Sets the location of this event to the given string.
+     *
+     * @param location location of this event
+     * @return the accumulated builder
+     */
     public EventBuilder location(String location) {
       this.location = location;
       return this;
     }
 
+    /**
+     * Sets the status of this event to the given string.
+     *
+     * @param status status of this event
+     * @return the accumulated builder
+     */
     public EventBuilder status(String status) {
       this.status = status;
       return this;
     }
 
+    /**
+     * Returns the final EventImp with all the desired fields & sets up the event series.
+     *
+     * @return EventImp with all its fields set to the fields of this builder instance.
+     */
     public EventImp build() {
       EventImp toReturn = new EventImp(this.series, this.subject, this.startDate, this.endDate, this.description,
               this.location, this.status);
