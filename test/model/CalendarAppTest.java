@@ -11,6 +11,9 @@ import java.util.Map;
 
 import static org.junit.Assert.*;
 
+/**
+ * This class test the Calendar's functions work as intended.
+ */
 public class CalendarAppTest {
 
   @Test
@@ -24,6 +27,7 @@ public class CalendarAppTest {
     EventImp.EventBuilder builder2 = EventImp.getBuilder();
     builder2.subject("test");
     builder.allDay(LocalDate.of(2025, 1, 1));
+    builder.description("different");
     assertThrows(IllegalArgumentException.class, () -> calendar.add(builder.build()));
   }
 
@@ -79,31 +83,54 @@ public class CalendarAppTest {
 
   @Test
   public void testPrintEvents() {
-    Calendar calendar = buildBasicTestCalendar();
-    calendar.add(EventImp.getBuilder()
-            .subject("ood")
-            .allDay(LocalDate.of(2025, 1, 3))
-            .build());
-    List<Event> expected = new ArrayList<>(List.of(
-            EventImp.getBuilder()
-                    .subject("test")
-                    .allDay(LocalDate.of(2025, 1, 1))
-                    .build()
-            , EventImp.getBuilder()
-                    .subject("test other")
-                    .allDay(LocalDate.of(2025, 1, 1))
-                    .build()
+    Calendar calendar = new CalendarApp();
+    EventImp.EventBuilder builder = EventImp.getBuilder();
+    builder.subject("test");
+    builder.allDay(LocalDate.of(2025, 1, 1));
+    Event event1 = builder.build();
+    calendar.add(event1);
+    builder.subject("Test other");
+    Event event2 = builder.build();
+    calendar.add(event2);
+    builder.allDay(LocalDate.of(2025, 1, 2));
+    Event event3 = builder.build();
+    calendar.add(event3);
+    Event event4 = builder
+            .startDateTime(LocalDateTime.of(2025, 1, 3, 7, 0))
+            .endDateTime(LocalDateTime.of(2025, 1, 3, 9, 0))
+            .build();
+    calendar.add(event4);
+    Event event5 = builder
+            .allDay(LocalDate.of(2025, 1, 4))
+            .build();
+    calendar.add(event5);
+
+    assertEquals(new ArrayList<>(List.of(event1, event2)),
+            calendar.findEvents(LocalDate.of(2025, 1, 1)));
+
+    assertEquals(new ArrayList<>(List.of(event3, event4)), calendar.findEvents(
+            LocalDateTime.of(2025, 1, 2, 3, 0),
+            LocalDateTime.of(2025, 1, 3, 12, 0)
     ));
-    // should work, the problem lies with junit.
-    assertEquals(expected, calendar.findEvents(LocalDate.of(2025, 1, 1)));
-    // assert the string
   }
 
   @Test
   public void testShowStatus() {
     Calendar calendar = buildBasicTestCalendar();
-    assertEquals("busy", calendar.showStatus(LocalDateTime.of(2025, 1, 1, 10, 0)));
-    assertEquals("free", calendar.showStatus(LocalDateTime.of(2025, 1, 1, 5, 0)));
+    assertEquals("busy", calendar.showStatus(
+            LocalDateTime.of(2025, 1, 1, 10, 0)));
+    assertEquals("free", calendar.showStatus(
+            LocalDateTime.of(2025, 1, 1, 5, 0)));
+    Event event = EventImp.getBuilder()
+            .startDateTime(LocalDateTime.of(2025, 1, 1, 4, 0))
+            .endDateTime(LocalDateTime.of(2025, 1, 1, 7, 0))
+            .build();
+    calendar.add(event);
+    assertEquals("busy", calendar.showStatus(
+            LocalDateTime.of(2025, 1, 1, 5, 0)));
+    event.edit("start", "2025-01-01T05:01");
+    assertEquals("free", calendar.showStatus(
+            LocalDateTime.of(2025, 1, 1, 5, 0)));
   }
 
 }

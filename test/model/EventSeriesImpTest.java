@@ -15,6 +15,9 @@ import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertThrows;
 
 
+/**
+ * This class tests teh event series implementation.
+ */
 public class EventSeriesImpTest {
 
   private Calendar calendar;
@@ -126,5 +129,8 @@ public class EventSeriesImpTest {
     assertEquals(LocalDateTime.of(2025, 6, 7, 10, 0), event2.getStartDate());
     assertEquals(LocalDateTime.of(2025, 6, 7, 17, 0), event2.getEndDate());
     assertEquals(LocalDateTime.of(2025, 6, 8, 10, 0), event3.getStartDate());
+
+    assertThrows(IllegalArgumentException.class, () ->
+            event2.edit("end", "2025-06-08T10:00"));
   }
 }

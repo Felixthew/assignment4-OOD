@@ -24,7 +24,7 @@ public class ExecutableCalendar {
       File file = new File(args[2]);
       controller.goHeadless(file);
     } else {
-      // whatever the default is supposed to be idk.
+      // program defaults to interactive
       controller.goInteractive();
     }
   }

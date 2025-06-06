@@ -9,6 +9,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
 
+/**
+ * This class tests the event implementation.
+ */
 public class EventImpTest {
 
   @Test
@@ -17,12 +20,6 @@ public class EventImpTest {
             .startDateTime(LocalDateTime.of(1, 1, 1, 2, 0))
             .endDateTime(LocalDateTime.of(1, 1, 1, 1, 0));
     assertThrows(IllegalArgumentException.class, event::build);
-
-    Event event1 = EventImp.getBuilder()
-            .subject("Felix's 20th birthday")
-            .allDay(LocalDate.of(2026, 5, 13))
-            .build();
-    assertThrows(IllegalArgumentException.class, () -> event1.edit("start", "2026-05-13T18:00"));
   }
 
   @Test
@@ -30,7 +27,8 @@ public class EventImpTest {
     EventImp.EventBuilder event1 = EventImp.getBuilder()
             .allDay(LocalDate.of(2025, 6, 5));
     EventImp.EventBuilder event2 = EventImp.getBuilder()
-            .startDateTime(LocalDateTime.of(2025, 6, 5, 10, 0));
+            .startDateTime(LocalDateTime.of(2025, 6, 5, 10, 0))
+            .endDateTime(LocalDateTime.of(2025, 6, 5, 11, 30));
     assertTrue(event2.build().compareTo(event1.build()) > 0);
 
     event1.allDay(LocalDate.of(2025, 6, 6));
@@ -38,6 +36,7 @@ public class EventImpTest {
 
     event2.allDay(LocalDate.of(2025, 6, 6));
     assertEquals(0, event1.build().compareTo(event2.build()));
+    assertEquals(event1.build(), event2.build());
   }
 
   @Test

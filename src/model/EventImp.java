@@ -45,7 +45,7 @@ public class EventImp implements Event {
 
     private EventBuilder() {
       this.series = new EventSeriesImp();
-      this.subject = "";
+      this.subject = "untitled";
       this.startDate = LocalDateTime.of(0, 1, 1, 0, 0);
       this.endDate = LocalDateTime.of(0, 1, 1, 0, 0);
       this.description = "";
