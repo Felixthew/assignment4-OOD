@@ -5,6 +5,11 @@ import java.util.HashMap;
 import model.Calendar;
 import view.CalendarView;
 
+/**
+ * Command responsible for editing a single event. Command (specifications) format
+ * is: [property] [eventSubject] from [dateStringTtimeString] to [dateStringTtimeString]
+ * with [NewPropertyValue]
+ */
 public class EditEvent implements CalendarCommand {
   String specifications;
 
@@ -14,7 +19,8 @@ public class EditEvent implements CalendarCommand {
 
   @Override
   public void execute(Calendar calendar, CalendarView view) {
-    // <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString> with <NewPropertyValue>
+    // <property> <eventSubject> from <dateStringTtimeString> to <dateStringTtimeString>
+    // with <NewPropertyValue>
     HashMap<String, String> identifiers = new HashMap<>();
 
     String property = this.specifications.split(" ")[0];

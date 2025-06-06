@@ -27,6 +27,9 @@ import static org.junit.Assert.assertEquals;
  */
 public class CalendarControllerImplTest {
 
+  /**
+   * Mock model to test controller.
+   */
   public class MockCalendar implements Calendar {
     private StringBuilder log;
 
