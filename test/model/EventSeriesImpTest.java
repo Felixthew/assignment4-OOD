@@ -16,7 +16,7 @@ import static org.junit.Assert.assertThrows;
 
 
 /**
- * This class tests teh event series implementation.
+ * This class tests the event series implementation.
  */
 public class EventSeriesImpTest {
 
@@ -29,10 +29,27 @@ public class EventSeriesImpTest {
     view = new CalendarTextViewImp();
   }
 
+  // invalid b/c spans multiple days
   @Test
   public void testInvalidSeries() {
     CreateEvent create = new CreateEvent(
             "ood from 2025-06-05T09:00 to 2025-06-06T09:00 repeats u for 5 times");
+    assertThrows(IllegalArgumentException.class, () -> create.execute(calendar, view));
+  }
+
+  // invalid b/c end time is before start
+  @Test
+  public void testInvalidSeries2() {
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T11:00 to 2025-06-05T08:00 repeats u for 5 times");
+    assertThrows(IllegalArgumentException.class, () -> create.execute(calendar, view));
+  }
+
+  // invalid b/c not enough specifications
+  @Test
+  public void testInvalidSeries3() {
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T11:00 to 2025-06-05T08:00 repeats u");
     assertThrows(IllegalArgumentException.class, () -> create.execute(calendar, view));
   }
 
@@ -64,6 +81,35 @@ public class EventSeriesImpTest {
             "ood: starts 2025-06-12T09:00, ends 2025-06-12T10:00\n" +
             "ood: starts 2025-06-15T09:00, ends 2025-06-15T10:00\n" +
             "ood: starts 2025-06-19T09:00, ends 2025-06-19T10:00", calendar.toString());
+  }
+
+  @Test
+  public void testCreateAllDaySeriesRepeatsTimes() {
+    CreateEvent create = new CreateEvent(
+            "ood on 2025-06-05 repeats u " +
+                    "for 3 times");
+    // also test the implicit inclusion of the current day in the series repeats
+    create.execute(calendar, view);
+    assertEquals("Calendar:\n" +
+            "ood: starts 2025-06-05T08:00, ends 2025-06-05T17:00\n" +
+            "ood: starts 2025-06-08T08:00, ends 2025-06-08T17:00\n" +
+            "ood: starts 2025-06-12T08:00, ends 2025-06-12T17:00\n" +
+            "ood: starts 2025-06-15T08:00, ends 2025-06-15T17:00", calendar.toString());
+  }
+
+  @Test
+  public void testCreateAllDaySeries() {
+    CreateEvent create = new CreateEvent(
+            "ood on 2025-06-05 repeats u " +
+                    "until 2025-06-20");
+    // also test the implicit inclusion of the current day in the series repeats
+    create.execute(calendar, view);
+    assertEquals("Calendar:\n" +
+            "ood: starts 2025-06-05T08:00, ends 2025-06-05T17:00\n" +
+            "ood: starts 2025-06-08T08:00, ends 2025-06-08T17:00\n" +
+            "ood: starts 2025-06-12T08:00, ends 2025-06-12T17:00\n" +
+            "ood: starts 2025-06-15T08:00, ends 2025-06-15T17:00\n" +
+            "ood: starts 2025-06-19T08:00, ends 2025-06-19T17:00", calendar.toString());
   }
 
   @Test

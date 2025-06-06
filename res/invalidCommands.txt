@@ -1,5 +1,4 @@
 create event CS3500 from 2025-05-05T11:40 to 2025-05-05T13:20 repeats MTWR until 2025-06-19
 edit event location CS3500 from 2025-05-09T11:40 to 2025-05-09T13:20 with snell
 create event algo from 2025-06-02T12:00 to 2025-06-03T8:00 repeats TF for 15 times
-
-what do you expect me to put here?
+q

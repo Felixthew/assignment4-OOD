@@ -3,7 +3,6 @@ package view;
 import org.junit.Before;
 import org.junit.Test;
 
-
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.time.LocalDate;
