@@ -76,7 +76,14 @@ public class CalendarControllerImpl implements CalendarController {
       default:
         throw new IllegalArgumentException("Invalid command");
     }
-    command.execute(calendar, view);
+
+    // try to execute command; error may occur
+    try {
+      command.execute(calendar, view);
+    } catch (Exception e) {
+      view.displayError(e.getMessage());
+    }
+
     if (!commandKey.equals("print events") && !commandKey.equals("show status")) {
       view.displayCalendar(calendar);
     }
