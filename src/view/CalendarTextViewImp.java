@@ -1,10 +1,11 @@
 package view;
 
-import java.util.jar.JarOutputStream;
-
 import model.Calendar;
 import model.Event;
 
+/**
+ * Represents a text view for a calendar.
+ */
 public class CalendarTextViewImp implements CalendarView {
 
   @Override

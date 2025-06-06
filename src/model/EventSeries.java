@@ -1,8 +1,11 @@
 package model;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
+/**
+ * This interface represents all methods of an event series that can store and modify
+ * its own events.
+ */
 public interface EventSeries {
 
   /**

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class EventSeriesImp implements EventSeries {
-  private List<Event> eventList;
+  private final List<Event> eventList;
 
   public EventSeriesImp() {
     this.eventList = new ArrayList<Event>();

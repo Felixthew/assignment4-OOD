@@ -6,12 +6,13 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * this is an interface that represents all the function of a calendar that can store and query events.
+ * This is an interface that represents all the function of a calendar that can store and
+ * query events.
  */
 public interface Calendar {
 
   /**
-   * Adds the given event to the calendar
+   * Adds the given event to the calendar.
    *
    * @param event to be added.
    * @return the resulting Calendar.

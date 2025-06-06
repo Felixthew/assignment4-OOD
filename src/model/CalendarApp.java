@@ -41,7 +41,6 @@ public class CalendarApp implements Calendar {
         case "subject":
           filteredEvents = filteredEvents.stream().filter((e) ->
                   e.getSubject().equals(value)).collect(Collectors.toList());
-          ;
           break;
         case "from":
           filteredEvents = filteredEvents.stream().filter((e) ->
@@ -51,6 +50,8 @@ public class CalendarApp implements Calendar {
           filteredEvents = filteredEvents.stream().filter((e) ->
                   e.getEndDate().equals(LocalDateTime.parse(value))).collect(Collectors.toList());
           break;
+        default:
+          throw new IllegalArgumentException("Unrecognized identifier");
       }
     }
     if (filteredEvents.size() != 1) {
@@ -90,7 +91,7 @@ public class CalendarApp implements Calendar {
   }
 
   /**
-   * Displays each event line by line
+   * Displays each event line by line.
    *
    * @return the resulting string.
    */
