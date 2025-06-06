@@ -4,7 +4,7 @@ arguments you please.
 What each member has done:
 Felix:
 
-- All tests
+- Controller and model tests
 - All View
 - Model:
     - CalendarApp
