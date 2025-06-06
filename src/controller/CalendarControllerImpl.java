@@ -24,7 +24,6 @@ public class CalendarControllerImpl implements CalendarController {
     Scanner in = new Scanner(fileInputStream);
     while (in.hasNext()) {
       inputText(in);
-      in.nextLine();
     }
     // missing exit command
   }
@@ -36,7 +35,6 @@ public class CalendarControllerImpl implements CalendarController {
       view.promptForInput();
       // try catch for graceful error handling
       inputText(in);
-      view.displayCalendar(calendar);
     }
   }
 
@@ -73,6 +71,9 @@ public class CalendarControllerImpl implements CalendarController {
         throw new IllegalArgumentException("Invalid command");
     }
     command.execute(calendar, view);
+    if (!commandKey.equals("print events") && !commandKey.equals("show status")) {
+      view.displayCalendar(calendar);
+    }
   }
 
   public static String extractAndRemoveSubject(String specifications) {
