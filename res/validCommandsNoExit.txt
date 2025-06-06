@@ -1,0 +1,4 @@
+create event hello from 2025-06-05T09:50 to 2025-06-05T11:30 location mugar repeats US until 2025-07-02
+edit event location hello from 2025-06-08T09:50 to 2025-06-08T11:30 with snell
+edit events start hello from 2025-06-15T09:50 with 2025-06-15T10:00
+edit series location hello from 2025-07-03T10:00 with shillman

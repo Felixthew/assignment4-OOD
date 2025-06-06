@@ -3,10 +3,13 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class CalendarCommandImpl implements CalendarCommand {
+/**
+ * Represents the fields and methods in common across many calendar commands.
+ */
+public abstract class AbstractCalendarCommandImpl implements CalendarCommand {
   String specifications;
 
-  public CalendarCommandImpl(String specifications) {
+  public AbstractCalendarCommandImpl(String specifications) {
     this.specifications = specifications;
   }
 

@@ -8,7 +8,7 @@ import model.Calendar;
 import model.Event;
 import view.CalendarView;
 
-public class PrintEvents extends CalendarCommandImpl {
+public class PrintEvents extends AbstractCalendarCommandImpl {
 
   public PrintEvents(String specifications) {
     super(specifications);

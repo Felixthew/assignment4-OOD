@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import model.Calendar;
 import view.CalendarView;
 
-public class ShowStatus extends CalendarCommandImpl {
+public class ShowStatus extends AbstractCalendarCommandImpl {
 
   public ShowStatus(String specifications) {
     super(specifications);
