@@ -15,6 +15,9 @@ import model.EventImp;
 
 import static org.junit.Assert.*;
 
+/**
+ * Test class for the text view ui.
+ */
 public class CalendarTextViewImpTest {
 
   private CalendarTextViewImp view;
