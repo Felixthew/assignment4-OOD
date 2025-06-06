@@ -58,7 +58,8 @@ public class CalendarTextViewImpTest {
             .allDay(LocalDate.of(2025, 6, 8)).build();
     cal.add(event2);
     view.displayCalendar(cal);
-    assertTrue(outContent.toString().contains("Calendar:\nLunch: starts 2025-06-05T12:30, ends 2025-06-05T13:30\n" +
+    assertTrue(outContent.toString().contains("Calendar:\nLunch: starts 2025-06-05T12:30, " +
+            "ends 2025-06-05T13:30\n" +
             "Class: starts 2025-06-08T08:00, ends 2025-06-08T17:00"));
   }
 
