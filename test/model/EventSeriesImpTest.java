@@ -99,7 +99,7 @@ public class EventSeriesImpTest {
   }
 
   @Test
-  public void testEditPartOfSeriesMultipleTimes() {
+  public void testEditStartOnPartOfSeries() {
     EventSeries series = new EventSeriesImp();
     Event event1 = EventImp.getBuilder()
             .subject("ood")
