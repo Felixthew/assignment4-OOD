@@ -6,6 +6,7 @@ import model.Calendar;
 import model.Event;
 
 public class CalendarTextViewImp implements CalendarView {
+
   @Override
   public void promptForInput() {
     System.out.println("Enter your input:");
