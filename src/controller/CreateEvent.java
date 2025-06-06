@@ -17,7 +17,7 @@ import model.EventSeries;
 import model.EventSeriesImp;
 import view.CalendarView;
 
-public class CreateEvent extends CalendarCommandImpl {
+public class CreateEvent extends AbstractCalendarCommandImpl {
   private static final Map<Character, DayOfWeek> dayOfWeekMap = new HashMap<>(Map.of(
           'm', DayOfWeek.MONDAY,
           't', DayOfWeek.TUESDAY,
