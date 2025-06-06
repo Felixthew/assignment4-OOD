@@ -3,11 +3,16 @@ package controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Scanner;
 
 import model.Calendar;
 import view.CalendarView;
 
+/**
+ * Represents a calendar controller that utilizes a scanner to read and process inputs
+ * from either a file or System.in
+ */
 public class CalendarControllerImpl implements CalendarController {
 
   private final Calendar calendar;
@@ -26,17 +31,15 @@ public class CalendarControllerImpl implements CalendarController {
       inputText(in);
     }
     view.displayError("No exit command found!");
-    // missing exit command
   }
 
   @Override
-  public void goInteractive() {
-    Scanner in = new Scanner(System.in);
+  public void goInteractive(InputStream in) {
+    Scanner scanner = new Scanner(in);
     while (true) {
       try {
         view.promptForInput();
-        // try catch for graceful error handling
-        inputText(in);
+        inputText(scanner);
       } catch (Exception e) {
         view.displayError(e.getMessage());
       }
@@ -87,17 +90,5 @@ public class CalendarControllerImpl implements CalendarController {
     if (!commandKey.equals("print events") && !commandKey.equals("show status")) {
       view.displayCalendar(calendar);
     }
-  }
-
-  public static String extractAndRemoveSubject(String specifications) {
-    String subject;
-    if (specifications.charAt(0) == '\"') {
-      subject = specifications.substring(1).split("\" ")[0];
-      specifications = specifications.substring(1).split("\" ")[1];
-    } else {
-      subject = specifications.split(" ")[0];
-      specifications = specifications.replace(subject, "");
-    }
-    return subject;
   }
 }

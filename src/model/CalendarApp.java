@@ -8,9 +8,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Represents an implementation of a Calendar that is capable of storing and querying events.
+ */
 public class CalendarApp implements Calendar {
   List<Event> allEvents;
 
+  /**
+   * Creates an empty calendar.
+   */
   public CalendarApp() {
     this.allEvents = new ArrayList<>();
   }
@@ -83,6 +89,11 @@ public class CalendarApp implements Calendar {
     return "free";
   }
 
+  /**
+   * Displays each event line by line
+   *
+   * @return the resulting string.
+   */
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();

@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * this is an interface that represents all the function of a calendar that can store and query events.
+ */
 public interface Calendar {
 
   /**
@@ -41,5 +44,11 @@ public interface Calendar {
    */
   List<Event> findEvents(LocalDateTime start, LocalDateTime end);
 
+  /**
+   * Returns whether the user has something scheduled at the given time.
+   *
+   * @param dateTime the time to check.
+   * @return status of the user (busy or free)
+   */
   String showStatus(LocalDateTime dateTime);
 }

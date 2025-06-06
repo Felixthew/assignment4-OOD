@@ -17,6 +17,17 @@ import model.EventSeries;
 import model.EventSeriesImp;
 import view.CalendarView;
 
+/**
+ * The command responsible for creating an event or event series based on the user's
+ * specifications. Command format should follow "create event (subject) (event specifications)"
+ * or if creating a series, "create event (subject) (event specifications)
+ * repeats (series specifications). Event specifications should be listed as keyword, value.
+ * The keywords are location, from, to, on, status, and description. From and to dates
+ * are date times required in the format YYYY-MM-DDThh:mm and if one is provided the other must
+ * be provided as well. On is just a date in the format YYYY-MM-DD. Series specifications and
+ * there values are, repeats (consecutive letters as seen below representing the days of the
+ * week to repeat on, for (an int number of times to repeat) and until (date time to end at).
+ */
 public class CreateEvent extends AbstractCalendarCommandImpl {
   private static final Map<Character, DayOfWeek> dayOfWeekMap = new HashMap<>(Map.of(
           'm', DayOfWeek.MONDAY,
@@ -28,6 +39,11 @@ public class CreateEvent extends AbstractCalendarCommandImpl {
           'u', DayOfWeek.SUNDAY
   ));
 
+  /**
+   * Creates the command with the specifications.
+   *
+   * @param specifications the specifications for creating an event
+   */
   public CreateEvent(String specifications) {
     super(specifications);
   }
@@ -44,7 +60,8 @@ public class CreateEvent extends AbstractCalendarCommandImpl {
     List<String> seriesSpecsList;
     if (specifications.contains(" repeats ")) {
       eventSpecsList = Arrays.asList(specifications.split(" repeats ")[0].split(" "));
-      seriesSpecsList = Arrays.asList(("repeats " + specifications.split(" repeats ")[1]).split(" "));
+      seriesSpecsList = Arrays.asList(
+              ("repeats " + specifications.split(" repeats ")[1]).split(" "));
     } else {
       eventSpecsList = Arrays.asList(specifications.split(" "));
       seriesSpecsList = null;
@@ -58,14 +75,13 @@ public class CreateEvent extends AbstractCalendarCommandImpl {
     calendar.add(startEvent);
 
     if (seriesSpecsList != null) {
-
       buildEventSeries(calendar, seriesSpecsList, seriesSpecs, startEvent, eventSeries, eventSpecs);
     }
   }
 
-  private void buildEventSeries(Calendar calendar, List<String> seriesSpecsList, Map<String,
-                                        String> seriesSpecs, Event startEvent, EventSeries eventSeries,
-                                Map<String, String> eventSpecs) {
+  private void buildEventSeries(Calendar calendar, List<String> seriesSpecsList,
+                                Map<String, String> seriesSpecs, Event startEvent,
+                                EventSeries eventSeries, Map<String, String> eventSpecs) {
     if (startEvent.getStartDate().getDayOfMonth() != startEvent.getEndDate().getDayOfMonth()) {
       throw new IllegalArgumentException("Series events cannot span multiple days");
     }
@@ -116,8 +132,8 @@ public class CreateEvent extends AbstractCalendarCommandImpl {
     }
   }
 
-  private void createSeriesEvent(Calendar calendar, EventSeries eventSeries, Map<String,
-          String> eventSpecs, LocalDateTime currentDate) {
+  private void createSeriesEvent(Calendar calendar, EventSeries eventSeries,
+                                 Map<String, String> eventSpecs, LocalDateTime currentDate) {
     if (eventSpecs.containsKey("from")) {
       eventSpecs.put("from", currentDate.toString());
       // put the end time on the current date
