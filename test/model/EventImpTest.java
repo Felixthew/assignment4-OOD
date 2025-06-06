@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import controller.CreateEvent;
+import view.CalendarTextViewImp;
+import view.CalendarView;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
@@ -100,5 +102,26 @@ public class EventImpTest {
             .build();
     assertEquals("OOD: starts 2025-06-06T08:00, ends 2025-06-06T17:00",
             event.toString());
+  }
+
+  @Test
+  public void testAllDayViaCreate() {
+    Calendar calendar = new CalendarApp();
+    CalendarView view = new CalendarTextViewImp();
+    CreateEvent create = new CreateEvent(
+            "ood on 2025-06-05");
+    create.execute(calendar, view);
+    assertEquals("Calendar:\n" +
+            "ood: starts 2025-06-05T08:00, ends 2025-06-05T17:00", calendar.toString());
+  }
+
+  // should throw exception b/c not enough specifications
+  @Test(expected = IllegalArgumentException.class)
+  public void testInvalidEvent() {
+    Calendar calendar = new CalendarApp();
+    CalendarView view = new CalendarTextViewImp();
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T09:00");
+    create.execute(calendar, view);
   }
 }
