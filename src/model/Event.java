@@ -30,7 +30,7 @@ public interface Event extends Comparable<Event> {
   LocalDateTime getEndDate();
 
   /**
-   * gets the subject
+   * Gets the subject.
    *
    * @return the subject as a string.
    */

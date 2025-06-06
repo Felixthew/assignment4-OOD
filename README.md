@@ -31,6 +31,7 @@ Felix:
     - CreateEvent
     - PrintEvents
     - ShowStatus
+    - Main method
 
 Lyanne:
 
@@ -50,3 +51,6 @@ Together:
 - Advising each other on implementation.
 - Res folder
 - Miscellaneous small edits
+
+As far as we are aware, our calendar functions it should. Keep in mind that how the calendar
+functions has proven by piazza and the description of the assignment to be quite unclear.

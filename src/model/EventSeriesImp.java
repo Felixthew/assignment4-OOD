@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Implementation of an event series that represents repeating events as specified by the user.
+ */
 public class EventSeriesImp implements EventSeries {
   private final List<Event> eventList;
 
