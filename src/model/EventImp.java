@@ -2,9 +2,11 @@ package model;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.chrono.ChronoLocalDateTime;
 import java.util.Objects;
 
+/**
+ * Implementation of a calendar event with time and properties.
+ */
 public class EventImp implements Event {
   // the event series this event is associated with, can be a series of 1
   private EventSeries series;
@@ -160,8 +162,8 @@ public class EventImp implements Event {
      * @return EventImp with all its fields set to the fields of this builder instance.
      */
     public EventImp build() {
-      EventImp toReturn = new EventImp(this.series, this.subject, this.startDate, this.endDate, this.description,
-              this.location, this.status);
+      EventImp toReturn = new EventImp(this.series, this.subject, this.startDate, this.endDate,
+              this.description, this.location, this.status);
       this.series.add(toReturn);
       return toReturn;
     }
@@ -271,6 +273,7 @@ public class EventImp implements Event {
     }
   }
 
+  @Override
   public String toString() {
     String result = this.subject + ": starts " + this.startDate.toString() + ", ends " +
             this.endDate.toString();
@@ -303,6 +306,7 @@ public class EventImp implements Event {
     return false;
   }
 
+  @Override
   public int hashCode() {
     return Objects.hash(this.subject, this.startDate, this.endDate);
   }
