@@ -31,15 +31,24 @@ public class EventSeriesImpTest {
 
   @Test
   public void testInvalidSeries() {
-    CreateEvent create = new CreateEvent("ood from 2025-06-05T09:00 to 2025-06-06T09:00 repeats u for 5 times");
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T09:00 to 2025-06-06T09:00 repeats u for 5 times");
     assertThrows(IllegalArgumentException.class, () -> create.execute(calendar, view));
   }
 
   @Test
   public void testCreateProperSeries() {
-    CreateEvent create = new CreateEvent("ood from 2025-06-05T09:00 to 2025-06-05T10:00 repeats u for 5 times");
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T09:00 to 2025-06-05T10:00 repeats u for 5 times");
+    // also test the implicit inclusion of the current day in the series repeats
     create.execute(calendar, view);
-    System.out.println(calendar);
+    assertEquals("Calendar:\n" +
+            "ood: starts 2025-06-05T09:00, ends 2025-06-05T10:00\n" +
+            "ood: starts 2025-06-08T09:00, ends 2025-06-08T10:00\n" +
+            "ood: starts 2025-06-12T09:00, ends 2025-06-12T10:00\n" +
+            "ood: starts 2025-06-15T09:00, ends 2025-06-15T10:00\n" +
+            "ood: starts 2025-06-19T09:00, ends 2025-06-19T10:00\n" +
+            "ood: starts 2025-06-22T09:00, ends 2025-06-22T10:00", calendar.toString());
   }
 
   @Test
@@ -92,7 +101,8 @@ public class EventSeriesImpTest {
             .build();
     series.add(event3);
 
-    series.editFrom("subject", "fundies", LocalDateTime.of(2025, 6, 7, 1, 0));
+    series.editFrom("subject", "fundies",
+            LocalDateTime.of(2025, 6, 7, 1, 0));
 
     assertEquals("ood", event1.getSubject());
     assertEquals("fundies", event2.getSubject());
@@ -123,12 +133,17 @@ public class EventSeriesImpTest {
             .build();
     series.add(event3);
 
-    series.editFrom("start", "2025-06-07T10:00", LocalDateTime.of(2025, 6, 7, 1, 0));
+    series.editFrom("start", "2025-06-07T10:00",
+            LocalDateTime.of(2025, 6, 7, 1, 0));
     assertNotEquals(event1.getEventSeries(), event2.getEventSeries());
-    assertEquals(LocalDateTime.of(2025, 6, 6, 8, 0), event1.getStartDate());
-    assertEquals(LocalDateTime.of(2025, 6, 7, 10, 0), event2.getStartDate());
-    assertEquals(LocalDateTime.of(2025, 6, 7, 17, 0), event2.getEndDate());
-    assertEquals(LocalDateTime.of(2025, 6, 8, 10, 0), event3.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 6, 8, 0),
+            event1.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 7, 10, 0),
+            event2.getStartDate());
+    assertEquals(LocalDateTime.of(2025, 6, 7, 17, 0),
+            event2.getEndDate());
+    assertEquals(LocalDateTime.of(2025, 6, 8, 10, 0),
+            event3.getStartDate());
 
     assertThrows(IllegalArgumentException.class, () ->
             event2.edit("end", "2025-06-08T10:00"));

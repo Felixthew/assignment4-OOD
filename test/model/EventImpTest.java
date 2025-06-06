@@ -58,7 +58,19 @@ public class EventImpTest {
             .endDateTime(LocalDateTime.of(2025, 6, 6, 10, 0))
             .build();
     event.edit("subject", "not ood");
-    System.out.println(event);
-    // use to string to check
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T10:00",
+            event.toString());
+    event.edit("end", "2025-06-06T11:00");
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T11:00",
+            event.toString());
+    event.edit("location", "curry");
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T11:00, " +
+            "location: curry", event.toString());
+    event.edit("description", "class");
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T11:00, " +
+            "location: curry, description: class", event.toString());
+    event.edit("status", "public");
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T11:00, " +
+            "location: curry, description: class, status: public", event.toString());
   }
 }

@@ -1,9 +1,2 @@
-- Event toString
-- Event equals
-- Event get end date
-- Event get subject
-- the rest of the commands
-- Print events method for calendar
-- show status method in calendar
-- tests
-- breaking of series when edited
+- JDoc
+- more tests

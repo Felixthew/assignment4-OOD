@@ -220,6 +220,14 @@ public class EventImp implements Event {
       result = result + ", location: " + this.location;
     }
 
+    if (!this.description.isEmpty()) {
+      result += ", description: " + this.description;
+    }
+
+    if (!this.status.isEmpty()) {
+      result += ", status: " + this.status;
+    }
+
     return result;
   }
 
