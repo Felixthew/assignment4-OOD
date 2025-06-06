@@ -17,6 +17,12 @@ public class EventImpTest {
             .startDateTime(LocalDateTime.of(1, 1, 1, 2, 0))
             .endDateTime(LocalDateTime.of(1, 1, 1, 1, 0));
     assertThrows(IllegalArgumentException.class, event::build);
+
+    Event event1 = EventImp.getBuilder()
+            .subject("Felix's 20th birthday")
+            .allDay(LocalDate.of(2026, 5, 13))
+            .build();
+    assertThrows(IllegalArgumentException.class, () -> event1.edit("start", "2026-05-13T18:00"));
   }
 
   @Test

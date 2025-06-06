@@ -24,8 +24,8 @@ public class CalendarControllerImpl implements CalendarController {
     Scanner in = new Scanner(fileInputStream);
     while (in.hasNext()) {
       inputText(in);
-      in.nextLine();
     }
+    view.displayError("No exit command found!");
     // missing exit command
   }
 
@@ -33,17 +33,21 @@ public class CalendarControllerImpl implements CalendarController {
   public void goInteractive() {
     Scanner in = new Scanner(System.in);
     while (true) {
-      view.promptForInput();
-      // try catch for graceful error handling
-      inputText(in);
-      view.displayCalendar(calendar);
+      try {
+        view.promptForInput();
+        // try catch for graceful error handling
+        inputText(in);
+      } catch (Exception e) {
+        view.displayError(e.getMessage());
+      }
     }
   }
 
   private void inputText(Scanner in) {
     String commandKey;
     commandKey = in.next();
-    if (commandKey.equals("q")) {
+    if (commandKey.equalsIgnoreCase("q")
+            || commandKey.equalsIgnoreCase("quit")) {
       System.exit(0);
     }
     commandKey += " " + in.next();
@@ -73,6 +77,9 @@ public class CalendarControllerImpl implements CalendarController {
         throw new IllegalArgumentException("Invalid command");
     }
     command.execute(calendar, view);
+    if (!commandKey.equals("print events") && !commandKey.equals("show status")) {
+      view.displayCalendar(calendar);
+    }
   }
 
   public static String extractAndRemoveSubject(String specifications) {

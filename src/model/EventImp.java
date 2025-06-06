@@ -18,6 +18,9 @@ public class EventImp implements Event {
 
   private EventImp(EventSeries series, String subject, LocalDateTime startDate, LocalDateTime endDate,
                    String description, String location, String status) {
+    if (startDate.isAfter(endDate)) {
+      throw new IllegalArgumentException("Start date cannot be after end date");
+    }
     this.series = series;
     this.subject = subject;
     this.startDate = startDate;
@@ -202,6 +205,9 @@ public class EventImp implements Event {
       // do nothing if property is invalid?
       default:
         break;
+    }
+    if (this.startDate.isAfter(this.endDate)) {
+      throw new IllegalArgumentException("Start cannot be after end date");
     }
   }
 

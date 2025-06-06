@@ -30,8 +30,11 @@ public class CalendarAppTest {
   @Test
   public void testAddEvent() {
     Calendar calendar = buildBasicTestCalendar();
-    System.out.println(calendar);
-    // assert the print statement of calendar is correct
+    assertEquals("Calendar:\n" +
+                    "test: starts 2025-01-01T08:00, ends 2025-01-01T17:00\n" +
+                    "Test other: starts 2025-01-01T08:00, ends 2025-01-01T17:00\n" +
+                    "Test other: starts 2025-01-02T08:00, ends 2025-01-02T17:00",
+            calendar.toString());
   }
 
   private static Calendar buildBasicTestCalendar() {
