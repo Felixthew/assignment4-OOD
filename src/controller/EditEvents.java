@@ -7,6 +7,13 @@ import model.Calendar;
 import model.Event;
 import view.CalendarView;
 
+/**
+ * Command responsible for editing multiple events that are part of a series.
+ * Command (specifications) format
+ * is: [property] [eventSubject] from [dateStringTtimeString]
+ * with [NewPropertyValue]
+ */
+
 public class EditEvents implements CalendarCommand {
   String specifications;
 
