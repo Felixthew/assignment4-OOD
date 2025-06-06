@@ -27,31 +27,35 @@ public class CalendarControllerImpl implements CalendarController {
   public void goHeadless(File file) throws FileNotFoundException {
     FileInputStream fileInputStream = new FileInputStream(file);
     Scanner in = new Scanner(fileInputStream);
-    while (in.hasNext()) {
-      inputText(in);
+    boolean run = true;
+    while (in.hasNext() && run) {
+      run = inputText(in);
     }
-    view.displayError("No exit command found!");
+    if (run) {
+      view.displayError("No exit command found!");
+    }
   }
 
   @Override
   public void goInteractive(InputStream in) {
     Scanner scanner = new Scanner(in);
-    while (true) {
+    boolean run = true;
+    while (run) {
       try {
         view.promptForInput();
-        inputText(scanner);
+        run = inputText(scanner);
       } catch (Exception e) {
         view.displayError(e.getMessage());
       }
     }
   }
 
-  private void inputText(Scanner in) {
+  private boolean inputText(Scanner in) {
     String commandKey;
     commandKey = in.next();
     if (commandKey.equalsIgnoreCase("q")
             || commandKey.equalsIgnoreCase("quit")) {
-      System.exit(0);
+      return false;
     }
     commandKey += " " + in.next();
 
@@ -79,16 +83,11 @@ public class CalendarControllerImpl implements CalendarController {
       default:
         throw new IllegalArgumentException("Invalid command");
     }
-
-    // try to execute command; error may occur
-    try {
-      command.execute(calendar, view);
-    } catch (Exception e) {
-      view.displayError(e.getMessage());
-    }
+    command.execute(calendar, view);
 
     if (!commandKey.equals("print events") && !commandKey.equals("show status")) {
       view.displayCalendar(calendar);
     }
+    return true;
   }
 }

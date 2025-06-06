@@ -37,7 +37,7 @@ public class EventSeriesImpTest {
   }
 
   @Test
-  public void testCreateProperSeries() {
+  public void testCreateProperSeriesRepeatsTimes() {
     CreateEvent create = new CreateEvent(
             "ood from 2025-06-05T09:00 to 2025-06-05T10:00 repeats u for 5 times");
     // also test the implicit inclusion of the current day in the series repeats
@@ -49,6 +49,21 @@ public class EventSeriesImpTest {
             "ood: starts 2025-06-15T09:00, ends 2025-06-15T10:00\n" +
             "ood: starts 2025-06-19T09:00, ends 2025-06-19T10:00\n" +
             "ood: starts 2025-06-22T09:00, ends 2025-06-22T10:00", calendar.toString());
+  }
+
+  @Test
+  public void testCreateProperSeriesRepeatsUntil() {
+    CreateEvent create = new CreateEvent(
+            "ood from 2025-06-05T09:00 to 2025-06-05T10:00 repeats u " +
+                    "until 2025-06-20");
+    // also test the implicit inclusion of the current day in the series repeats
+    create.execute(calendar, view);
+    assertEquals("Calendar:\n" +
+            "ood: starts 2025-06-05T09:00, ends 2025-06-05T10:00\n" +
+            "ood: starts 2025-06-08T09:00, ends 2025-06-08T10:00\n" +
+            "ood: starts 2025-06-12T09:00, ends 2025-06-12T10:00\n" +
+            "ood: starts 2025-06-15T09:00, ends 2025-06-15T10:00\n" +
+            "ood: starts 2025-06-19T09:00, ends 2025-06-19T10:00", calendar.toString());
   }
 
   @Test
@@ -147,5 +162,21 @@ public class EventSeriesImpTest {
 
     assertThrows(IllegalArgumentException.class, () ->
             event2.edit("end", "2025-06-08T10:00"));
+  }
+
+  @Test
+  public void editSingularEventSeries() {
+    Event event = EventImp.getBuilder()
+            .subject("OOD")
+            .startDateTime(LocalDateTime.of(2025, 6, 6, 9, 0))
+            .endDateTime(LocalDateTime.of(2025, 6, 6, 10, 0))
+            .build();
+    event.getEventSeries().editFrom("location", "mugar",
+            LocalDateTime.of(2000, 1, 1, 0, 0));
+    assertEquals("OOD: starts 2025-06-06T09:00, ends 2025-06-06T10:00, location: mugar",
+            event.toString());
+    event.getEventSeries().editAll("subject", "not ood");
+    assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T10:00, location: mugar",
+            event.toString());
   }
 }

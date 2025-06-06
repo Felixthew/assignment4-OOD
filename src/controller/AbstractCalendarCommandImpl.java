@@ -13,21 +13,20 @@ public abstract class AbstractCalendarCommandImpl implements CalendarCommand {
     this.specifications = specifications;
   }
 
-  protected static List<String> extractOptionalQuote(List<String> s) {
-    if (s.get(0).charAt(0) == '\"') {
-      StringBuilder enclosed = new StringBuilder();
-      for (int i = 0; i < s.size(); i++) {
-        String string = s.get(i);
-        enclosed.append(string);
-        if (string.endsWith("\"")) {
-          // recombines what was in quotes to now be one string
-          List<String> returnList = new ArrayList<>();
-          returnList.add(enclosed.substring(1, enclosed.length() - 1));
-          returnList.addAll(s.subList(i + 1, s.size()));
-          return returnList;
-        }
-      }
+  /**
+   * This is meant to handle a multi-word subject in "".
+   *
+   * @return the subject as a string.
+   */
+  protected String extractAndRemoveSubject() {
+    String subject;
+    if (specifications.charAt(0) == '\"') {
+      subject = specifications.substring(1).split("\" ")[0];
+      specifications = specifications.substring(1).split("\" ")[1];
+    } else {
+      subject = specifications.split(" ")[0];
+      specifications = specifications.replace(subject + " ", "");
     }
-    return s;
+    return subject;
   }
 }

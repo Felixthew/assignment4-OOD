@@ -3,13 +3,9 @@ package controller;
 import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,39 +28,41 @@ import static org.junit.Assert.assertEquals;
 public class CalendarControllerImplTest {
 
   public class MockCalendar implements Calendar {
-    final StringBuilder log;
+    private StringBuilder log;
 
     public MockCalendar(StringBuilder log) {
       this.log = Objects.requireNonNull(log);
     }
 
     public Calendar add(Event event) {
-      log.append("added " + event.toString());
+      log.append("added " + event.toString() + "\n");
       return new CalendarApp();
     }
 
     public Event findEvent(Map<String, String> identifiers) throws IllegalArgumentException {
-      log.append("found event " + identifiers.get("subject"));
+      log.append("found event " + identifiers.get("subject") + "\n");
       return EventImp.getBuilder().build();
     }
 
     public List<Event> findEvents(LocalDate day) {
-      log.append("found events on " + day.toString());
+      log.append("found events on " + day.toString() + "\n");
       return new ArrayList<>();
     }
 
     public List<Event> findEvents(LocalDateTime start, LocalDateTime end) {
-      log.append("found events on " + start.toString() + " to " + end.toString());
+      log.append("found events on " + start.toString() + " to " + end.toString() + "\n");
       return new ArrayList<>();
     }
 
     public String showStatus(LocalDateTime dateTime) {
-      log.append("status for time " + dateTime.toString());
+      log.append("status for time " + dateTime.toString() + "\n");
       return "";
     }
 
   }
 
+  // this test uses a mock model to enure the proper commands are resulting in the proper
+  // methods being called with the proper inputs
   @Test
   public void testInputs() {
     CalendarView view = new CalendarTextViewImp();
@@ -74,12 +72,21 @@ public class CalendarControllerImplTest {
 
     CalendarController controller = new CalendarControllerImpl(cal, view);
 
-    String myString = "create event Dinner from 2025-06-01T17:00 to 2025-06-01T18:30";
+    String myString = "create event dinner from 2025-06-01T17:00 to 2025-06-01T18:30\n" +
+            "edit event start lunch from 2025-06-01T12:00 to " +
+            "2025-06-01T13:00 with 2025-06-01T11:30\n" +
+            "print events on 2025-06-07\n" +
+            "print events from 2025-06-01T11:30 to 2025-06-01T20:00\n" +
+            "show status on 2025-06-01T11:30\n" +
+            "q";
     InputStream in = new ByteArrayInputStream(myString.getBytes());
 
     controller.goInteractive(in);
-    assertEquals("added Dinner: starts 2025-06-01T17:00, ends 2025-06-01T18:30",
-            log.toString());
+    assertEquals("added dinner: starts 2025-06-01T17:00, ends 2025-06-01T18:30\n" +
+            "found event lunch\n" +
+            "found events on 2025-06-07\n" +
+            "found events on 2025-06-01T11:30 to 2025-06-01T20:00\n" +
+            "status for time 2025-06-01T11:30\n", log.toString());
   }
 
   @Test

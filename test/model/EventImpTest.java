@@ -5,6 +5,8 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import controller.CreateEvent;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.assertTrue;
@@ -72,5 +74,31 @@ public class EventImpTest {
     event.edit("status", "public");
     assertEquals("not ood: starts 2025-06-06T09:00, ends 2025-06-06T11:00, " +
             "location: curry, description: class, status: public", event.toString());
+  }
+
+  // tests that setting end date to before start date swaps the tow, and vice versa
+  @Test
+  public void testDateSwapping() {
+    Event event = EventImp.getBuilder()
+            .subject("OOD")
+            .startDateTime(LocalDateTime.of(2025, 6, 6, 9, 0))
+            .endDateTime(LocalDateTime.of(2025, 6, 6, 10, 0))
+            .build();
+    event.edit("end", "2025-06-06T08:00");
+    assertEquals("OOD: starts 2025-06-06T08:00, ends 2025-06-06T09:00",
+            event.toString());
+    event.edit("start", "2025-06-06T13:00");
+    assertEquals("OOD: starts 2025-06-06T09:00, ends 2025-06-06T13:00",
+            event.toString());
+  }
+
+  @Test
+  public void testAllDay() {
+    Event event = EventImp.getBuilder()
+            .subject("OOD")
+            .allDay(LocalDate.of(2025, 6, 6))
+            .build();
+    assertEquals("OOD: starts 2025-06-06T08:00, ends 2025-06-06T17:00",
+            event.toString());
   }
 }

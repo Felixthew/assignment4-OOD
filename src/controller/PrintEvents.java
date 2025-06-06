@@ -42,7 +42,6 @@ public class PrintEvents extends AbstractCalendarCommandImpl {
       throw new IllegalArgumentException("Invalid command");
     }
     for (Event event : events) {
-      // should go through view
       view.displayEvent(event);
     }
   }
