@@ -69,4 +69,10 @@ public class CalendarTextViewImpTest {
             "ends 2025-06-05T13:30"));
   }
 
+  @Test
+  public void testDisplayMesasge() {
+    view.displayMessage("message!");
+    assertTrue(outContent.toString().contains("message!"));
+  }
+
 }
